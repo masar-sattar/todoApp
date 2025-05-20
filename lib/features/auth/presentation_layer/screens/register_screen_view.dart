@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:todo_app/features/auth/data_layer/repository/auth_repository.dart';
 import 'package:todo_app/features/auth/domain_layer/entities/register_body.dart';
 import 'package:todo_app/features/auth/presentation_layer/cubit/auth_states.dart';
 import 'package:todo_app/features/auth/presentation_layer/widgets/level_dropdown.dart';
 import 'package:todo_app/components/componnet/text_component.dart';
+import 'package:todo_app/features/auth/data_layer/data_source/auth_remote_data_source.dart';
+import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
+import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
 
 import '../cubit/auth_cubit.dart';
 
@@ -29,7 +33,11 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: AuthCubit(),
+      value: AuthCubit(
+        AuthRepository(
+            dataSource: AuthRemoteDataSource(),
+            authLocalDatasorce: AuthLocalDatasorce()),
+      ),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(

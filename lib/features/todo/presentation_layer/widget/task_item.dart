@@ -1,4 +1,3 @@
-// import 'package:flutter/material.dart';
 //
 // import '../screens/details_screen.dart';
 //
@@ -113,22 +112,24 @@ import 'package:flutter/material.dart';
 
 import '../../data_layer/model/task_models.dart';
 import '../screens/details_screen.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 
 class TaskItem extends StatelessWidget {
   final TaskModel task;
 
-  const TaskItem({super.key, required this.task}); // تعديل المُنشئ ليأخذ TaskModel
+  const TaskItem(
+      {super.key, required this.task}); // تعديل المُنشئ ليأخذ TaskModel
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const DetailsScreen();
+              return DetailsScreen(id: task.id, detailsitem: task);
             },
           ),
         );
@@ -138,9 +139,11 @@ class TaskItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset('assets/images/grocery_image.png',  //  task.image// عرض صورة المهمة
+            CachedNetworkImage(
               width: 48,
               height: 48,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              imageUrl: task.image,
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -161,7 +164,8 @@ class TaskItem extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 5),
                         decoration: BoxDecoration(
                           color: _getPriorityColor(task.priority),
                           borderRadius: BorderRadius.circular(5),
@@ -176,7 +180,8 @@ class TaskItem extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Icon(Icons.more_vert_outlined, color: Colors.purple, size: 20),
+                      const Icon(Icons.more_vert_outlined,
+                          color: Colors.purple, size: 20),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -192,7 +197,8 @@ class TaskItem extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.flag_outlined, color: Colors.blueAccent, size: 16),
+                          Icon(Icons.flag_outlined,
+                              color: Colors.blueAccent, size: 16),
                           const SizedBox(width: 4),
                           Text(
                             task.priority, // عرض الأولوية في مكان آخر (أو يمكنك تعديله حسب حاجتك)
@@ -242,4 +248,3 @@ class TaskItem extends StatelessWidget {
     }
   }
 }
-

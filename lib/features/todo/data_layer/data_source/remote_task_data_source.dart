@@ -1,10 +1,10 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:todo_app/components/network/error_handler/api_error_model.dart';
 import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
 
 import '../../../../components/network/dio_helper.dart';
 import 'base_remote_task_data_source.dart';
-
 
 class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
   @override
@@ -28,17 +28,36 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
   }
 
   @override
-  Future<List<TaskModel>> getTasks() {
+  Future<List<TaskModel>> getTasks() async {
     // TODO: Replace this with real data fetch - same as above
-    return Future.value([
-      TaskModel(image: 'image', date: '2 hours ago', title: 'title', description: 'description', priority: 'priority',state: 'state')
-    ]);
+
+    List<TaskModel> tasks = [];
+    try {
+      final response = await DioHelper.getData(
+        endPoint: "/todos",
+      );
+      final data = response.data;
+      // print(data);
+
+      for (int i = 0; i < data.length; i++) {
+        tasks.add(TaskModel.fromJson(data[i]));
+      }
+
+      if (response.statusCode != 200) {
+        throw ApiErrorModel.fromJson(response.data);
+      }
+    } catch (error) {
+      throw ApiErrorModel(message: error.toString());
+    }
+
+    return tasks;
   }
+
   @override
   Future<void> createTask(TaskModel task) async {
     try {
       final response = await DioHelper.postData(
-        endPoint: "/tasks",
+        endPoint: "/todos",
         body: task.toJson(),
       );
 
@@ -50,4 +69,26 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
     }
   }
 
+  @override
+  Future<void> deleteTask(String taskId) async {
+    try {
+      final response = await DioHelper.deleteData(
+        endPoint: "/todos/$taskId",
+      );
+    } catch (error) {
+      throw ApiErrorModel(message: error.toString());
+    }
+  }
+
+  Future<TaskModel> getOneTask(String id) async {
+    try {
+      final response = await DioHelper.getData(
+        endPoint: "/todos/$id",
+      );
+
+      return TaskModel.fromJson(response.data);
+    } catch (error) {
+      throw ApiErrorModel(message: error.toString());
+    }
+  }
 }

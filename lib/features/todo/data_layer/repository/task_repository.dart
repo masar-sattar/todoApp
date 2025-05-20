@@ -1,13 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-
 import '../../../../components/network/error_handler/api_error_model.dart';
 import '../../domain_layer/repository/base_task_repository.dart';
-import '../data_source/base_remote_task_data_source.dart';
+import '../data_source/remote_task_data_source.dart';
 import '../model/task_models.dart';
 
 class TaskRepository extends BaseTaskRepository {
-  final BaseRemoteTaskDataSource dataSource;
+  final RemoteTaskDataSource dataSource;
 
   TaskRepository(this.dataSource);
 
@@ -26,39 +25,43 @@ class TaskRepository extends BaseTaskRepository {
   }
 
   @override
-  Future<Either<ApiErrorModel, void>> createTask(
-      {required String image,
-      required String title,
-      required String description}) {
-    throw UnimplementedError();
+  Future<Either<ApiErrorModel, void>> createTask({
+    required String image,
+    required String title,
+    required String date,
+    required String description,
+    required String priority,
+  }) async {
+    try {
+      final response = await dataSource.createTask(TaskModel(
+          id: "",
+          image: image,
+          date: "",
+          title: title,
+          description: description,
+          priority: priority,
+          state: ""));
+
+      return Right(response);
+    } on ApiErrorModel catch (error) {
+      return Left(error);
+    }
   }
 
   @override
   Future<List<TaskModel>> getTasks() async {
-    // TODO: implement getTasks
     return await dataSource.getTasks();
   }
-// }
-// @override
-// Future<Either<ApiErrorModel, void>> createTask({
-//   required String date,
-//   required String image,
-//   required String title,
-//   required String description,
-// }) async {
-//   try {
-//     await dio.post(
-//       'your_api_endpoint/todo',
-//       data: {
-//         "due_date": date,
-//         "image": image,
-//         "title": title,
-//         "description": description,
-//       },
-//     );
-//     return Right(null);
-//   } catch (e) {
-//     return Left(ApiErrorModel.fromDioError(e));
-//   }
-// }
+
+  @override
+  Future<void> deleteTask({required String taskId}) async {
+    try {
+      final response = await dataSource.deleteTask(taskId);
+    } on ApiErrorModel catch (error) {}
+  }
+
+  @override
+  Future<TaskModel> getOneTask(String id) async {
+    return await dataSource.getOneTask(id);
+  }
 }

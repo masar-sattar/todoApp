@@ -5,10 +5,10 @@ import 'package:todo_app/components/utilities/app_colors.dart';
 import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_state.dart';
-
+import 'package:todo_app/features/todo/presentation_layer/screens/details_screen.dart';
 
 import '../widget/task_item.dart';
-import 'add_new_task.dart';
+import 'add_task/add_new_task.dart';
 import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -51,8 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const LoginScreenView()),
+                MaterialPageRoute(builder: (context) => LoginScreenView()),
               );
             },
             child: const Icon(Icons.logout, color: Colors.purple),
@@ -93,9 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-//       body: DefaultTabController(
-//         length: list.length,
-//         child: Column(
+
 //           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: [
 //             const Padding(
@@ -465,8 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 tabs: list
                     .map(
-                      (String item) =>
-                      Tab(
+                      (String item) => Tab(
                         child: Container(
                           height: double.infinity,
                           decoration: BoxDecoration(
@@ -480,7 +476,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                )
+                    )
                     .toList(),
               ),
             ),
@@ -495,8 +491,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is LoadedState) {
                     final tasks = selectedItem == "All"
                         ? state.tasks
-                        : state.tasks.where((task) =>
-                    task.state == selectedItem).toList();
+                        : state.tasks
+                            .where((task) => task.state == selectedItem)
+                            .toList();
 
                     if (tasks.isEmpty) {
                       return const Center(child: Text("No tasks found"));
@@ -504,8 +501,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return ListView.builder(
                       itemCount: tasks.length,
-                      itemBuilder: (context, index) =>
-                          TaskItem(task: tasks[index]),
+                      itemBuilder: (context, index) => GestureDetector(
+                        behavior: HitTestBehavior.translucent, //  مفيدددة جدا
+                        child: TaskItem(task: tasks[index]),
+                        onTap: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => DetailsScreen(
+                          //       detailsitem: tasks[index],
+                          //     ),
+                          //   ),
+                          // );
+                        },
+                      ),
                     );
                   } else {
                     return const SizedBox();
@@ -515,7 +524,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-
       ),
     );
   }

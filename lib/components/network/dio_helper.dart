@@ -1,22 +1,22 @@
-
 import 'package:dio/dio.dart';
 import 'app_interceptor.dart';
 
 class DioHelper {
   static Dio? _dio;
+  static String? token;
 
   /// إنشاء أو إرجاع نسخة موجودة من Dio
   static Dio _dioInstance() {
-    if (_dio == null) {
-      _dio = Dio(
-        BaseOptions(
+    // if (_dio == null)
+    //  {
+    _dio = Dio(
+      BaseOptions(
           baseUrl: "https://todo.iraqsapp.com",
           connectTimeout: const Duration(seconds: 15),
           receiveTimeout: const Duration(seconds: 15),
-        ),
-      )
-        ..interceptors.add(AppInterceptor());
-    }
+          headers: {'Authorization': "Bearer $token"}),
+    )..interceptors.add(AppInterceptor());
+    // }
     return _dio!;
   }
 
@@ -29,7 +29,7 @@ class DioHelper {
   }) async {
     try {
       final dio = _dioInstance();
-      dio.options.headers = headers ?? {};
+      // dio.options.headers = headers ?? {};
       final response = await dio.post(
         endPoint,
         queryParameters: query,
@@ -48,12 +48,32 @@ class DioHelper {
     Map<String, dynamic>? headers,
   }) async {
     try {
-      _dioInstance().options.headers = headers ?? {};
+      // _dioInstance().options.headers = headers ?? {};
       final response = await _dioInstance().delete(endPoint);
       return response;
     } catch (error) {
       print('Delete error: $error');
       throw Exception('Delete request failed: $error');
+    }
+  }
+
+  //get requset
+  static Future<Response> getData({
+    required String endPoint,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? query,
+  }) async {
+    try {
+      final dio = _dioInstance();
+      // dio.options.headers = headers ?? {};
+      final response = await dio.get(
+        endPoint,
+        queryParameters: query,
+      );
+      return response;
+    } catch (error) {
+      print('Post error: $error');
+      throw Exception('Post request failed: $error');
     }
   }
 

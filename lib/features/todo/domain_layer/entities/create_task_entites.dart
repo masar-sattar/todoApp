@@ -1,17 +1,17 @@
 class CreateTaskEntites {
 
-  String image;
-  String title;
-  String descrption;
-  String priority;
-  String date;
+  String? image;
+  String? title;
+  String? descrption;
+  String? priority;
+  String? date;
 
   CreateTaskEntites({
-  required this.image,
-  required this.date,
-  required this.title,
-  required this.descrption,
-  required this.priority,
+  this.image,
+   this.date,
+   this.title,
+   this.descrption,
+   this.priority,
 
   });
 
@@ -23,6 +23,17 @@ class CreateTaskEntites {
     "priority":priority,
     "dueDate":date
   };
+  }
+  CreateTaskEntites copyWith({String? title, String? image, String? descrption, String?  priority ,String? date }) {
+    return CreateTaskEntites(
+      title: title ?? this.title,
+      image: image ?? this.image,
+      descrption: descrption ?? this.descrption,
+      priority: priority ?? this.priority,
+      date : date ?? this.date,
+
+
+    );
   }
   }
 

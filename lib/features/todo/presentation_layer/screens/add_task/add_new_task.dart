@@ -5,11 +5,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/components/componnet/text_component.dart';
 
-import '../../../../components/utilities/app_colors.dart';
-import '../cubit/todo_cubit.dart';
-import '../cubit/todo_state.dart';
-import '../widget/date_pick.dart';
-import 'home_screen.dart';
+import '../../../../../components/utilities/app_colors.dart';
+import '../../cubit/todo_cubit.dart';
+import '../../cubit/todo_state.dart';
+import '../../widget/date_pick.dart';
+import '../../widget/priorty_dropdown.dart';
+import '../home_screen.dart';
 
 class AddNewTask extends StatefulWidget {
   const AddNewTask({super.key});
@@ -19,7 +20,6 @@ class AddNewTask extends StatefulWidget {
 }
 
 class _AddNewTaskState extends State<AddNewTask> {
-
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descptionController = TextEditingController();
   @override
@@ -61,7 +61,8 @@ class _AddNewTaskState extends State<AddNewTask> {
                           top: 8,
                           left: 8,
                           child: GestureDetector(
-                            onTap: () => context.read<TaskCubit>().pickTaskImage(),
+                            onTap: () =>
+                                context.read<TaskCubit>().pickTaskImage(),
                             child: CircleAvatar(
                               radius: 25,
                               backgroundColor: AppColors.mainColor,
@@ -121,16 +122,21 @@ class _AddNewTaskState extends State<AddNewTask> {
 
             const Text('Task Description'),
             const SizedBox(height: 8),
-            const TextComponent(
+            TextComponent(
+              controller: descptionController,
               hintText: 'Enter description here...',
               maxLines: 5,
             ),
             const SizedBox(height: 20),
 
             const Text('Priority'),
+
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: const PriorityDropdown(),
+            ),
+
             const SizedBox(height: 8),
-            // const PriorityDropdown(),
-            const SizedBox(height: 20),
 
             const Text('Due date'),
             const SizedBox(height: 8),
@@ -146,17 +152,16 @@ class _AddNewTaskState extends State<AddNewTask> {
                       borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                onPressed: () {
-                  context.read<TaskCubit>().addTask(
-                        title: titleController.text,
-                        description: "",
+                onPressed: () async {
+                  final taskCubit = context.read<TaskCubit>();
 
-                      );
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  //   (route) => false,
-                  // );
+                  taskCubit.createTask?.title = titleController.text;
+                  taskCubit.createTask?.descrption = descptionController.text;
+
+                  await context.read<TaskCubit>().addTask();
+
+                  context.read<TaskCubit>().getTasks();
+                  Navigator.pop(context);
                 },
                 child: const Text('Add task',
                     style: TextStyle(fontSize: 18, color: Colors.white)),

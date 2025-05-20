@@ -6,17 +6,18 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:todo_app/components/network/error_handler/api_error_model.dart';
 import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
+import 'package:todo_app/features/todo/data_layer/repository/task_repository.dart';
+import 'package:todo_app/features/todo/domain_layer/entities/create_task_entites.dart';
 
 import '../../domain_layer/repository/base_task_repository.dart';
 import 'todo_state.dart';
 
 class TaskCubit extends Cubit<TodoState> {
-  final BaseTaskRepository baseTaskRepository;
+  final TaskRepository taskrepo;
 
-  TaskCubit(this.baseTaskRepository) : super(InitialState());
+  TaskCubit(this.taskrepo) : super(InitialState());
 
-  final List<TaskModel> tasks = [];
-
+  CreateTaskEntites? createTask = CreateTaskEntites();
 
   XFile? taskImage;
   FormData? taskFormData; // send to backend (API)
@@ -51,37 +52,42 @@ class TaskCubit extends Cubit<TodoState> {
         ),
       },
     );
-    final response = await baseTaskRepository.uploadImage(
+    final response = await taskrepo.uploadImage(
       data: taskFormData!,
     );
+
     response.fold(
       (l) {
-        throw l;
+        print("ERROR FROM API : ${l.message}");
       },
       (r) {
-        taskImageResponse = r;
+        createTask!.image = r;
+
+        // SharedPrefences.saveData(key: "accessToken", value: r.accesstoken);
+        print("SUCCESS CALLING API");
       },
     );
   }
 
-
-
-  Future<void> addTask({
-    // required String date,
-    required String title,
-    required String description,
-  }) async {
+  Future<void> addTask() async {
     // emit(AddTaskLoadingState());
     try {
       await uploadTaskImage();
 
-      await createTask(
-        image: taskImageResponse,
-        title: title,
-        description: description,
+      await taskrepo.createTask(
+          image: createTask?.image ?? '',
+          title: createTask!.title!,
+          date: createTask!.date ?? '',
+          description: createTask!.descrption!,
+          priority: createTask!.priority!);
 
-        // dueDate:date,
-      );
+      // await createTask(
+      //   image: taskImageResponse,
+      //   title: title,
+      //   description: description,
+
+      //   // dueDate:date,
+      // );
 
       // emit(AddTaskSuccessState());
     } on ApiErrorModel catch (error) {
@@ -91,31 +97,43 @@ class TaskCubit extends Cubit<TodoState> {
   }
 
 // createTask
-  Future<void> createTask({
-    required String image,
-    required String title,
-    required String description,
-    // required String date,
-  }) async {
-    final response = await baseTaskRepository.createTask(
-      image: image,
-      title: title,
-      description: description,
-    );
-    response.fold(
-      (l) => throw l,
-      (r) => print("Task Created"),
-    );
-  }
+//   Future<void> createTask({
+//     required String image,
+//     required String title,
+//     required String description,
+//     // required String date,
+//   }) async {
+//     final response = await baseTaskRepository.createTask(
+//       image: image,
+//       title: title,
+//       description: description,
+//     );
+//     response.fold(
+//       (l) => throw l,
+//       (r) => print("Task Created"),
+//     );
+//   }
 
-  Future<void> getTasks({
-    int page = 1
-}) async {
+  Future<void> getTasks({int page = 1}) async {
     //here we fetch the data from the repository
-    final response = await baseTaskRepository.getTasks();
+    final response = await taskrepo.getTasks();
 
     // you can check if the server returned an error
 
     emit(LoadedState(tasks: response));
+  }
+
+  Future<void> deleteTask(String taskId) async {
+    //here we fetch the data from the repository
+    final response = await taskrepo.deleteTask(taskId: taskId);
+
+    // you can check if the server returned an error
+
+    // emit(LoadedState(tasks: response));
+  }
+
+  Future<void> getOneTask(String id) async {
+    final response = await taskrepo.getOneTask(id);
+    emit(LoadedOneTask(oneTask: response));
   }
 }

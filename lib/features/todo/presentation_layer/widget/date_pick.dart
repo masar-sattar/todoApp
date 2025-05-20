@@ -23,7 +23,7 @@ class _DatePickState extends State<DatePick> {
     return Container(
 
 
-padding: const EdgeInsets.all(8),
+padding: const EdgeInsets.symmetric(vertical: 20,horizontal:8),
 child: Center(child: TextField(
 controller: dateController,
 

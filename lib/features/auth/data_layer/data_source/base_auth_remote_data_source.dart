@@ -5,4 +5,8 @@ abstract class BaseAuthRemoteDataSource {
   Future<TokensModel> registerUser({
     required RegisterBody registerBody,
   });
+  Future<TokensModel> loginUser({
+    required  String phoneNumber,
+    required String passWord,
+  });
 }
