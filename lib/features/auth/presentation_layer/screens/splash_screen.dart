@@ -16,6 +16,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     taregtUser();
+    // Future.delayed(const Duration(seconds: 4), () {
+    //   taregtUser(); // سيتم تنفيذ هذه الدالة بعد 2 ثانية
+    // });
   }
 
   void taregtUser() async {
@@ -39,8 +42,24 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.purple,
       body: Center(
-        child: Text('splash'),
-      ),
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/Tasky.png',
+              width: 100,
+              height: 100,
+            ),
+            Image.asset(
+              'assets/images/y.png',
+              width: 40,
+              height: 40,
+            )
+          ],
+        ),
+      )),
     );
   }
 }

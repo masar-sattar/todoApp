@@ -129,7 +129,9 @@ class TaskItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return DetailsScreen(id: task.id, detailsitem: task);
+              return DetailsScreen(
+                id: task.id,
+              );
             },
           ),
         );
@@ -139,11 +141,23 @@ class TaskItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // CachedNetworkImage(
+            //   width: 48,
+            //   height: 48,
+            //   placeholder: (context, url) => const CircularProgressIndicator(),
+            //   imageUrl: task.image,
+            // ),
+
             CachedNetworkImage(
+              imageUrl: task.image,
               width: 48,
               height: 48,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              imageUrl: task.image,
+              placeholder: (context, url) => Container(
+                color: Colors.grey[200],
+                child: Icon(Icons.task, color: Colors.grey[400]),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              fit: BoxFit.cover,
             ),
             const SizedBox(width: 20),
             Expanded(

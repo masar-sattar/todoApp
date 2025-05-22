@@ -7,8 +7,11 @@ abstract class BaseRemoteTaskDataSource {
   });
 
   Future<List<TaskModel>> getTasks();
-  @override
+
   Future<void> createTask(TaskModel task);
+
   Future<void> deleteTask(String taskId);
+
   Future<TaskModel> getOneTask(String id);
+  // Future<TaskModel> updateTask();
 }

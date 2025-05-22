@@ -7,6 +7,9 @@ import 'package:todo_app/features/auth/data_layer/repository/auth_repository.dar
 import 'package:todo_app/features/auth/presentation_layer/cubit/auth_cubit.dart';
 import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
 import 'package:todo_app/features/auth/presentation_layer/screens/splash_screen.dart';
+import 'package:todo_app/features/profile/data%20layer/repositry/profile_repositry.dart';
+import 'package:todo_app/features/profile/data%20sorce/remote_profile_data_sorce.dart';
+import 'package:todo_app/features/profile/presntation/cubit/profile_cubit.dart';
 
 // import 'package:todo_app/features/auth/presentation_layer/screens/register_screen_view.dart';
 // import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
@@ -37,7 +40,12 @@ class TodoApp extends StatelessWidget {
         BlocProvider(
             create: (context) => AuthCubit(AuthRepository(
                 dataSource: AuthRemoteDataSource(),
-                authLocalDatasorce: AuthLocalDatasorce())))
+                authLocalDatasorce: AuthLocalDatasorce()))),
+        BlocProvider(
+          create: (context) => ProfileCubit(ProfileRepositry(
+            dataprofile: RemoteProfileDataSorce(),
+          )),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

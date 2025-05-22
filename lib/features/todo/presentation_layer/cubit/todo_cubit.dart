@@ -70,7 +70,9 @@ class TaskCubit extends Cubit<TodoState> {
   }
 
   Future<void> addTask() async {
-    // emit(AddTaskLoadingState());
+    // final x = state;
+
+    emit(LoadingState());
     try {
       await uploadTaskImage();
 
@@ -80,42 +82,15 @@ class TaskCubit extends Cubit<TodoState> {
           date: createTask!.date ?? '',
           description: createTask!.descrption!,
           priority: createTask!.priority!);
-
-      // await createTask(
-      //   image: taskImageResponse,
-      //   title: title,
-      //   description: description,
-
-      //   // dueDate:date,
-      // );
-
-      // emit(AddTaskSuccessState());
+      // emit(x);
     } on ApiErrorModel catch (error) {
       print(error.message);
-      // emit(AddTaskFailState());
     }
   }
 
-// createTask
-//   Future<void> createTask({
-//     required String image,
-//     required String title,
-//     required String description,
-//     // required String date,
-//   }) async {
-//     final response = await baseTaskRepository.createTask(
-//       image: image,
-//       title: title,
-//       description: description,
-//     );
-//     response.fold(
-//       (l) => throw l,
-//       (r) => print("Task Created"),
-//     );
-//   }
-
   Future<void> getTasks({int page = 1}) async {
     //here we fetch the data from the repository
+    emit(LoadingState());
     final response = await taskrepo.getTasks();
 
     // you can check if the server returned an error
@@ -126,14 +101,15 @@ class TaskCubit extends Cubit<TodoState> {
   Future<void> deleteTask(String taskId) async {
     //here we fetch the data from the repository
     final response = await taskrepo.deleteTask(taskId: taskId);
-
+    getTasks();
     // you can check if the server returned an error
 
     // emit(LoadedState(tasks: response));
   }
 
-  Future<void> getOneTask(String id) async {
+  Future<TaskModel> getOneTask(String id) async {
     final response = await taskrepo.getOneTask(id);
-    emit(LoadedOneTask(oneTask: response));
+    // emit(LoadedOneTask(oneTask: response));
+    return response;
   }
 }

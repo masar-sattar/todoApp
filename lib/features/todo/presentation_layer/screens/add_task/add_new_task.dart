@@ -143,29 +143,40 @@ class _AddNewTaskState extends State<AddNewTask> {
             DatePick(),
 
             const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.mainColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                onPressed: () async {
-                  final taskCubit = context.read<TaskCubit>();
+            BlocBuilder<TaskCubit, TodoState>(
+              builder: (context, state) {
+                if (state is LoadingState) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-                  taskCubit.createTask?.title = titleController.text;
-                  taskCubit.createTask?.descrption = descptionController.text;
+                return SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.mainColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    onPressed: () async {
+                      final taskCubit = context.read<TaskCubit>();
 
-                  await context.read<TaskCubit>().addTask();
+                      taskCubit.createTask?.title = titleController.text;
+                      taskCubit.createTask?.descrption =
+                          descptionController.text;
 
-                  context.read<TaskCubit>().getTasks();
-                  Navigator.pop(context);
-                },
-                child: const Text('Add task',
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-              ),
+                      await context.read<TaskCubit>().addTask();
+
+                      context.read<TaskCubit>().getTasks();
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Add task',
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                  ),
+                );
+              },
             ),
           ],
         ),

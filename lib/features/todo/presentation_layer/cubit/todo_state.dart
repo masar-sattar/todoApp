@@ -20,23 +20,6 @@ class LoadedState extends TodoState {
   LoadedState({
     required this.tasks,
   });
-//   final List<Todo> todos;
-//   final bool hasReachedMax;
-//
-//    LoadedState({required this.todos, required this.hasReachedMax});
-//
-//   LoadedState copyWith({
-//     List<Todo>? todos,
-//     bool? hasReachedMax,
-//   }) {
-//     return LoadedState(
-//       todos: todos ?? this.todos,
-//       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-//     );
-//   }
-//
-//   @override
-//   List<Object?> get props => [todos, hasReachedMax];
 }
 
 class ErrorState extends TodoState {
@@ -46,5 +29,7 @@ class ErrorState extends TodoState {
   List<Object?> get props => [message];
 }
 
+
 // class TaskPriorityUpdated extends TodoState{}
-class EmptyState extends TodoState {}
+// class EmptyState extends TodoState {}
+

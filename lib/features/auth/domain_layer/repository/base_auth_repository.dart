@@ -7,10 +7,9 @@ import '../entities/tokens.dart';
 abstract class BaseAuthRepository {
   Future<Either<ApiErrorModel, Tokens>> registerUser({
     required RegisterBody registerBody,
-
   });
   Future<Either<ApiErrorModel, Tokens>> loginUser({
-    required String phoneNumber ,
-required String password,
+    required String phoneNumber,
+    required String password,
   });
 }
