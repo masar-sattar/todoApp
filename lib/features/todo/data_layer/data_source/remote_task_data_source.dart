@@ -47,6 +47,7 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
         throw ApiErrorModel.fromJson(response.data);
       }
     } catch (error) {
+      print('hell error');
       throw ApiErrorModel(message: error.toString());
     }
 
@@ -89,6 +90,30 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
       return TaskModel.fromJson(response.data);
     } catch (error) {
       throw ApiErrorModel(message: error.toString());
+    }
+  }
+
+  @override
+  Future<void> updateTask({
+    required String id,
+    required TaskModel task,
+  }) async {
+    try {
+      final response = await DioHelper.putData(
+        endPoint: "/todos/$id",
+        body: task.toJson(),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiErrorModel(message: "Failed to update task");
+      }
+    } catch (error) {
+      if (error is DioException) {
+        throw ApiErrorModel(
+            message: error.response?.data["message"] ?? "Unknown error");
+      } else {
+        throw ApiErrorModel(message: error.toString());
+      }
     }
   }
 }
