@@ -42,8 +42,8 @@ class AuthRepository extends BaseAuthRepository {
       );
 
       DioHelper.token = result.accesstoken;
-      authLocalDatasorce.saveToken(result.accesstoken);
-
+      authLocalDatasorce.saveAccessToken(result.accesstoken);
+      // authLocalDatasorce.saveRefreshToken(result.refreshtoken);
       return Right(result);
     } on ApiErrorModel catch (error) {
       return Left(error);
@@ -51,7 +51,7 @@ class AuthRepository extends BaseAuthRepository {
   }
 
   Future<bool> isAuth() async {
-    final String? token = await authLocalDatasorce.getToken();
+    final String? token = await authLocalDatasorce.getAccessToken();
 
     if (token == null) {
       return false;

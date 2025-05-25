@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(builder: (context) => LoginScreenView()),
               );
             },
-            child: const Icon(Icons.logout, color: Colors.purple),
+            child: const Icon(Icons.logout, color: AppColors.mainColor),
           ),
           const SizedBox(width: 20),
         ],
@@ -99,10 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(
                     builder: (context) => const QRScannerScreen()),
               );
-
-              // if (scannedId != null) {
-              //   _openTaskDetails(scannedId);
-              // }
             },
             shape: const CircleBorder(),
           ),
@@ -116,7 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AddNewTask(),
+                  builder: (context) => const AddNewTask(
+                    isEdit: false,
+                  ),
                 ),
               );
             },

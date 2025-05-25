@@ -8,12 +8,6 @@ class PickTaskImageState extends TodoState {}
 
 class LoadingState extends TodoState {}
 
-class LoadedOneTask extends TodoState {
-  final TaskModel oneTask;
-
-  LoadedOneTask({required this.oneTask});
-}
-
 class LoadedState extends TodoState {
   final List<TaskModel> tasks;
 
@@ -27,6 +21,12 @@ class ErrorState extends TodoState {
   ErrorState(this.message);
   @override
   List<Object?> get props => [message];
+}
+
+class LoadedOneTask extends TodoState {
+  final TaskModel oneTask;
+
+  LoadedOneTask({required this.oneTask});
 }
 
 

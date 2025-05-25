@@ -24,5 +24,12 @@ abstract class BaseTaskRepository {
     required String taskId,
   });
   Future<TaskModel> getOneTask(String id);
-  // Future<void> updateTask();
+  Future<void> updateTask({
+    required String id,
+    required String title,
+    required String description,
+    required String date,
+    required String image,
+    required String priority,
+  });
 }

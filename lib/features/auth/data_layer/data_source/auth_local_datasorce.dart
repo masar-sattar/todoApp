@@ -1,14 +1,25 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthLocalDatasorce {
-  void saveToken(String token) async {
+  void saveAccessToken(String x) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
+    await prefs.setString('accessToken', x);
   }
 
-  Future<String?> getToken() async {
+  Future<String?> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
-    String? toke = prefs.getString('token');
+    String? toke = prefs.getString('accessToken');
+    return toke;
+  }
+
+  void saveRefreshToken(String x) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('refreshToken', x);
+  }
+
+  Future<String?> getRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? toke = prefs.getString('refreshToken');
     return toke;
   }
 }

@@ -90,8 +90,10 @@ class TaskCubit extends Cubit<TodoState> {
 
   Future<void> getTasks({int page = 1}) async {
     //here we fetch the data from the repository
+
     emit(LoadingState());
     final response = await taskrepo.getTasks();
+    print('Hello massar');
 
     // you can check if the server returned an error
 
@@ -109,7 +111,25 @@ class TaskCubit extends Cubit<TodoState> {
 
   Future<TaskModel> getOneTask(String id) async {
     final response = await taskrepo.getOneTask(id);
-    // emit(LoadedOneTask(oneTask: response));
+    emit(LoadedOneTask(oneTask: response));
     return response;
+  }
+
+  Future<bool> updateTask(String taskId) async {
+    emit(LoadingState());
+
+    if (taskImage != null) {
+      await uploadTaskImage();
+    }
+
+    await taskrepo.updateTask(
+      id: taskId,
+      title: createTask!.title!,
+      description: createTask!.descrption!,
+      priority: createTask!.priority!,
+      date: createTask!.date!,
+      image: createTask!.image ?? "",
+    );
+    return true;
   }
 }

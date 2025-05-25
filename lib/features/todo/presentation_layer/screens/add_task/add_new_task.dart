@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/components/componnet/text_component.dart';
+import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
+import 'package:todo_app/features/todo/domain_layer/entities/create_task_entites.dart';
 
 import '../../../../../components/utilities/app_colors.dart';
 import '../../cubit/todo_cubit.dart';
@@ -13,7 +15,9 @@ import '../../widget/priorty_dropdown.dart';
 import '../home_screen.dart';
 
 class AddNewTask extends StatefulWidget {
-  const AddNewTask({super.key});
+  final TaskModel? task;
+  final bool isEdit;
+  const AddNewTask({super.key, required this.isEdit, this.task});
 
   @override
   State<AddNewTask> createState() => _AddNewTaskState();
@@ -24,14 +28,26 @@ class _AddNewTaskState extends State<AddNewTask> {
   final TextEditingController descptionController = TextEditingController();
   @override
   void initState() {
-    context.read<TaskCubit>().clearImage();
     super.initState();
+    context.read<TaskCubit>().clearImage();
+
+    if (widget.isEdit && widget.task != null) {
+      titleController.text = widget.task!.title;
+      descptionController.text = widget.task!.description;
+      context.read<TaskCubit>().createTask = CreateTaskEntites(
+        title: widget.task!.title,
+        descrption: widget.task!.description,
+        image: widget.task!.image,
+        date: widget.task!.date,
+        priority: widget.task!.priority,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add new Task')),
+      appBar: AppBar(title: Text(widget.isEdit ? 'Edit Task' : 'Add Task')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -162,18 +178,44 @@ class _AddNewTaskState extends State<AddNewTask> {
                     ),
                     onPressed: () async {
                       final taskCubit = context.read<TaskCubit>();
-
                       taskCubit.createTask?.title = titleController.text;
                       taskCubit.createTask?.descrption =
                           descptionController.text;
 
-                      await context.read<TaskCubit>().addTask();
+                      // if (widget.isEdit) {
+                      //   await taskCubit.updateTask(widget.task!.id);
+                      // } else {
+                      //   await taskCubit.addTask();
+                      //   // Navigator.pop(context);
+                      // }
 
-                      context.read<TaskCubit>().getTasks();
+                      // await taskCubit.getTasks();
+                      // Navigator.pop(context);
+                      bool success = false;
+
+                      if (widget.isEdit) {
+                        success = await taskCubit.updateTask(widget.task!.id);
+                        if (success) {
+                          await taskCubit.getOneTask(widget.task!.id);
+                        }
+                      } else {
+                        await taskCubit.addTask();
+                      }
+
+                      // await taskCubit.getTasks();
                       Navigator.pop(context);
                     },
-                    child: const Text('Add task',
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 8),
+                        Text(
+                          widget.isEdit ? 'Update task' : 'Add task',
+                          style: const TextStyle(
+                              fontSize: 18, color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

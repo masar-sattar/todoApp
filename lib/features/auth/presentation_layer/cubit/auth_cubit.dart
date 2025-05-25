@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
 import '../../data_layer/data_source/auth_remote_data_source.dart';
 import '../../data_layer/repository/auth_repository.dart';
@@ -37,9 +38,10 @@ class AuthCubit extends Cubit<AuthStates> {
         print("ERROR FROM API : ${failure.message}");
       },
       (authModel) {
+        authRepository.authLocalDatasorce.getAccessToken();
         print("SUCCESS: ${authModel.accesstoken}");
         print("REFRESH: ${authModel.refreshtoken}");
-        // SharedPrefences.saveData(key: "accessToken", value: authModel.accesstoken);
+        // SharedPreferences.saveData(key: "accessToken", value: authModel.accesstoken);
         emit(AuthLoadedState());
       },
     );

@@ -13,5 +13,9 @@ abstract class BaseRemoteTaskDataSource {
   Future<void> deleteTask(String taskId);
 
   Future<TaskModel> getOneTask(String id);
-  // Future<TaskModel> updateTask();
+
+  Future<void> updateTask({
+    required String id,
+    required TaskModel task,
+  });
 }

@@ -64,4 +64,31 @@ class TaskRepository extends BaseTaskRepository {
   Future<TaskModel> getOneTask(String id) async {
     return await dataSource.getOneTask(id);
   }
+
+  @override
+  Future<void> updateTask({
+    required String id,
+    required String image,
+    required String title,
+    required String date,
+    required String description,
+    required String priority,
+  }) async {
+    try {
+      final response = await dataSource.updateTask(
+        id: id,
+        task: TaskModel(
+          id: id,
+          image: image,
+          date: date,
+          title: title,
+          description: description,
+          priority: priority,
+          state: "", // أو استخدم القيمة الحالية إن كانت متوفرة
+        ),
+      );
+    } on ApiErrorModel catch (error) {
+      throw error;
+    }
+  }
 }
