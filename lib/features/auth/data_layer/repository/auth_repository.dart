@@ -43,7 +43,7 @@ class AuthRepository extends BaseAuthRepository {
 
       DioHelper.token = result.accesstoken;
       authLocalDatasorce.saveAccessToken(result.accesstoken);
-      // authLocalDatasorce.saveRefreshToken(result.refreshtoken);
+      authLocalDatasorce.saveRefreshToken(result.refreshtoken);
       return Right(result);
     } on ApiErrorModel catch (error) {
       return Left(error);

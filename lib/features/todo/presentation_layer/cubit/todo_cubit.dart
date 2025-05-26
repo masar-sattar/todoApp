@@ -73,6 +73,13 @@ class TaskCubit extends Cubit<TodoState> {
     // final x = state;
 
     emit(LoadingState());
+    if (createTask == null ||
+        createTask!.date == null ||
+        createTask!.date!.isEmpty) {
+      emit(ErrorState("plz add date"));
+      return; // لا تكمل الإضافة إذا التاريخ غير موجود
+    }
+
     try {
       await uploadTaskImage();
 

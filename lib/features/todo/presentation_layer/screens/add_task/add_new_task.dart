@@ -26,6 +26,8 @@ class AddNewTask extends StatefulWidget {
 class _AddNewTaskState extends State<AddNewTask> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descptionController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -156,7 +158,7 @@ class _AddNewTaskState extends State<AddNewTask> {
 
             const Text('Due date'),
             const SizedBox(height: 8),
-            DatePick(),
+            DatePick(controller: dateController),
 
             const SizedBox(height: 30),
             BlocBuilder<TaskCubit, TodoState>(
@@ -178,9 +180,12 @@ class _AddNewTaskState extends State<AddNewTask> {
                     ),
                     onPressed: () async {
                       final taskCubit = context.read<TaskCubit>();
+                      taskCubit.createTask ??= CreateTaskEntites();
+                      taskCubit.createTask!;
                       taskCubit.createTask?.title = titleController.text;
                       taskCubit.createTask?.descrption =
                           descptionController.text;
+                      taskCubit.createTask?.date = dateController.text;
 
                       // if (widget.isEdit) {
                       //   await taskCubit.updateTask(widget.task!.id);
@@ -202,7 +207,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                         await taskCubit.addTask();
                       }
 
-                      // await taskCubit.getTasks();
+                      await taskCubit.getTasks();
                       Navigator.pop(context);
                     },
                     child: Row(

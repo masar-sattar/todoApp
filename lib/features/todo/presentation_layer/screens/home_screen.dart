@@ -31,27 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  // void _openTaskDetails(String taskId) async {
-  //   try {
-  //     final task = await context.read<TaskCubit>().getOneTask(taskId);
-
-  //     if (!mounted) return;
-
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => DetailsScreen(id: task.id),
-  //       ),
-  //     );
-  //   } catch (e) {
-  //     if (!mounted) return;
-
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Error: ${e.toString()}')),
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
-            child: const Icon(Icons.person, size: 30, color: Colors.purple),
+            child:
+                const Icon(Icons.person, size: 30, color: AppColors.mainColor),
           ),
           const SizedBox(width: 16),
           GestureDetector(
