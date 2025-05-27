@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, String>> list = [
     {"label": "All", "value": "all"},
-    {"label": "In Progress", "value": "inProgress"},
+    {"label": "InProgress", "value": "inProgress"},
     {"label": "Waiting", "value": "waiting"},
     {"label": "Finished", "value": "finished"},
   ];
@@ -60,11 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           GestureDetector(
             onTap: () {
               AuthLocalDatasorce().clearTokens();
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => LoginScreenView()),
 
-              // );
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => LoginScreenView()),
@@ -126,39 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.all(8.0),
               child: Text(
                 "My Tasks",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 8),
             SizedBox(
               height: 40,
-              child:
-                  // child: TabBar(
-                  //   onTap: (index) {
-                  //     setState(() {
-                  //       selectedItem = list[index];
-                  //     });
-                  //   },
-                  //   tabs: list
-                  //       .map(
-                  //         (String item) => Tab(
-                  //           child: Container(
-                  //             height: double.infinity,
-                  //             decoration: BoxDecoration(
-                  //               color: item == selectedItem
-                  //                   ? Colors.transparent
-                  //                   : AppColors.lightPurpleColor,
-                  //               borderRadius: BorderRadius.circular(50),
-                  //             ),
-                  //             child: Center(
-                  //               child: Text(item),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       )
-                  //       .toList(),
-                  // ),
-                  TabBar(
+              child: TabBar(
                 onTap: (index) {
                   setState(() {
                     selectedItem = list[index]["value"]!;

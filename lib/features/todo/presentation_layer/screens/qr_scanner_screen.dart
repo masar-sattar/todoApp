@@ -31,12 +31,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           if (code != null) {
             // setState(() => isScanning = true);
             print("✅ تم قراءة QR: $code");
+            Navigator.pop(context);
             Navigator.push<String>(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DetailsScreen(id: code))).then((_) {
-              setState(() => isScanning = true);
-            });
+                    builder: (context) => DetailsScreen(id: code)));
           } else {
             print(' لم يتم قراءة الكود');
           }

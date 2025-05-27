@@ -153,7 +153,7 @@ class _AddNewTaskState extends State<AddNewTask> {
 
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: const PriorityDropdown(),
+              child: PriorityDropdown(isEdit: widget.isEdit),
             ),
             if (widget.isEdit)
               Padding(
