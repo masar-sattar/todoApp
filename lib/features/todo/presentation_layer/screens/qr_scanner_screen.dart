@@ -38,7 +38,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               setState(() => isScanning = true);
             });
           } else {
-            print('❌ لم يتم قراءة الكود');
+            print(' لم يتم قراءة الكود');
           }
         },
       ),
