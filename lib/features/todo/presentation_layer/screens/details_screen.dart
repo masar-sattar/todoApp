@@ -1,4 +1,4 @@
-// ignore_for_file: duplicate_import, prefer_const_constructors
+// ignore_for_file: duplicate_import, prefer_const_constructors, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -151,7 +151,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Color(0xFFEFE6FF),
-                          hintText: "inprogress",
+                          hintText: task.state,
                           suffixIcon: Icon(Icons.arrow_drop_down,
                               color: AppColors.mainColor),
                           border: OutlineInputBorder(

@@ -23,13 +23,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> list = ["All", "In Progress", "Waiting", "Finished"];
+  List<Map<String, String>> list = [
+    {"label": "All", "value": "all"},
+    {"label": "In Progress", "value": "inProgress"},
+    {"label": "Waiting", "value": "waiting"},
+    {"label": "Finished", "value": "finished"},
+  ];
 
   String selectedItem = "";
 
   @override
   void initState() {
-    selectedItem = list[0];
+    selectedItem = list[0]['value']!;
     context.read<TaskCubit>().getTasks();
     super.initState();
   }
@@ -127,25 +132,52 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8),
             SizedBox(
               height: 40,
-              child: TabBar(
+              child:
+                  // child: TabBar(
+                  //   onTap: (index) {
+                  //     setState(() {
+                  //       selectedItem = list[index];
+                  //     });
+                  //   },
+                  //   tabs: list
+                  //       .map(
+                  //         (String item) => Tab(
+                  //           child: Container(
+                  //             height: double.infinity,
+                  //             decoration: BoxDecoration(
+                  //               color: item == selectedItem
+                  //                   ? Colors.transparent
+                  //                   : AppColors.lightPurpleColor,
+                  //               borderRadius: BorderRadius.circular(50),
+                  //             ),
+                  //             child: Center(
+                  //               child: Text(item),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )
+                  //       .toList(),
+                  // ),
+                  TabBar(
                 onTap: (index) {
                   setState(() {
-                    selectedItem = list[index];
+                    selectedItem = list[index]["value"]!;
+                    context.read<TaskCubit>().getTasks(status: selectedItem);
                   });
                 },
                 tabs: list
                     .map(
-                      (String item) => Tab(
+                      (item) => Tab(
                         child: Container(
                           height: double.infinity,
                           decoration: BoxDecoration(
-                            color: item == selectedItem
+                            color: item["value"] == selectedItem
                                 ? Colors.transparent
                                 : AppColors.lightPurpleColor,
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: Center(
-                            child: Text(item),
+                            child: Text(item["label"]!),
                           ),
                         ),
                       ),
@@ -162,11 +194,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is ErrorState) {
                     return const Center(child: Text("Error loading tasks"));
                   } else if (state is LoadedState) {
-                    final tasks = selectedItem == "All"
-                        ? state.tasks
-                        : state.tasks
-                            .where((task) => task.state == selectedItem)
-                            .toList();
+                    final tasks = state.tasks;
+
+                    // ? state.tasks
+                    // : state.tasks
+                    //     .where((task) => task.state == selectedItem)
+                    //     .toList();
 
                     if (tasks.isEmpty) {
                       return const Center(child: Text("No tasks found"));

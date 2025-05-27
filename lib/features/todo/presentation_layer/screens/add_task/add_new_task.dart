@@ -211,9 +211,9 @@ class _AddNewTaskState extends State<AddNewTask> {
                         }
                       } else {
                         await taskCubit.addTask();
+                        await taskCubit.getTasks();
                       }
 
-                      await taskCubit.getTasks();
                       if (!context.mounted) return;
                       Navigator.pop(context);
                     },

@@ -27,12 +27,12 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
   }
 
   @override
-  Future<List<TaskModel>> getTasks() async {
+  Future<List<TaskModel>> getTasks(String status) async {
     List<TaskModel> tasks = [];
     try {
       final response = await DioHelper.getData(
-        endPoint: "/todos",
-      );
+          endPoint: "/todos", query: status == "all" ? {} : {"status": status});
+
       final data = response.data;
       // print(data);
 

@@ -17,7 +17,7 @@ abstract class BaseTaskRepository {
     required String? state,
   });
 
-  Future<List<TaskModel>> getTasks();
+  Future<List<TaskModel>> getTasks(String status);
   Future<void> deleteTask({
     required String taskId,
   });

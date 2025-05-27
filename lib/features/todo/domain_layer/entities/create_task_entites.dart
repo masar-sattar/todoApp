@@ -4,16 +4,17 @@ class CreateTaskEntites {
   String? descrption;
   String? priority;
   String? date;
+  String? state;
 
-  CreateTaskEntites({
-    this.image,
-    this.date,
-    this.title,
-    this.descrption,
-    this.priority,
-  });
+  CreateTaskEntites(
+      {this.image,
+      this.date,
+      this.title,
+      this.descrption,
+      this.priority,
+      this.state});
 
-  get state => null;
+  // get state => null;
 
   Map<String, dynamic> toJson() {
     return {

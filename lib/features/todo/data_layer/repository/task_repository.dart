@@ -41,7 +41,7 @@ class TaskRepository extends BaseTaskRepository {
           title: title,
           description: description,
           priority: priority,
-          state: ""));
+          state: "waiting"));
 
       return Right(response);
     } on ApiErrorModel catch (error) {
@@ -50,8 +50,8 @@ class TaskRepository extends BaseTaskRepository {
   }
 
   @override
-  Future<List<TaskModel>> getTasks() async {
-    return await dataSource.getTasks();
+  Future<List<TaskModel>> getTasks(String status) async {
+    return await dataSource.getTasks(status);
   }
 
   @override
@@ -91,7 +91,7 @@ class TaskRepository extends BaseTaskRepository {
           state: state, // أو استخدم القيمة الحالية إن كانت متوفرة
         ),
       );
-    } on ApiErrorModel catch (e) {
+    } on ApiErrorModel {
       rethrow;
     }
   }

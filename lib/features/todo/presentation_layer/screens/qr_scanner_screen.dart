@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:todo_app/features/todo/presentation_layer/screens/details_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({super.key});
@@ -12,40 +13,35 @@ class QRScannerScreen extends StatefulWidget {
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  // QRViewController? controller;
+  // final MobileScannerController controller = MobileScannerController();
+
   bool isScanning = true;
 
   @override
-  // void dispose() {
-  //   controller?.dispose();
-  //   super.dispose();
-  // }
-
-  // void _onQRViewCreated(QRViewController controller) {
-  //   this.controller = controller;
-  //   controller.scannedDataStream.listen((scanData) {
-  //     if (isScanning) {
-  //       isScanning = false;
-  //       Navigator.pop(context, scanData.code);
-  //     }
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('مسح QR Code')),
-      body: MobileScanner(),
-      // body: QRView(
-      //   key: qrKey,
-      //   onQRViewCreated: _onQRViewCreated,
-      //   overlay: QrScannerOverlayShape(
-      //     borderColor: Colors.purple,
-      //     borderRadius: 10,
-      //     borderLength: 30,
-      //     borderWidth: 10,
-      //   ),
-      // ),
+      body: MobileScanner(
+        // controller: controller,
+        onDetect: (BarcodeCapture capture) {
+          if (!isScanning) return;
+
+          final String? code = capture.barcodes.first.rawValue;
+          if (code != null) {
+            // setState(() => isScanning = true);
+            print("✅ تم قراءة QR: $code");
+            Navigator.push<String>(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailsScreen(id: code))).then((_) {
+              setState(() => isScanning = true);
+            });
+          } else {
+            print('❌ لم يتم قراءة الكود');
+          }
+        },
+      ),
     );
   }
 }

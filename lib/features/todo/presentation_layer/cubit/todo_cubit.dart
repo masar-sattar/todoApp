@@ -96,12 +96,11 @@ class TaskCubit extends Cubit<TodoState> {
     }
   }
 
-  Future<void> getTasks({int page = 1}) async {
+  Future<void> getTasks({int page = 1, String status = "all"}) async {
     //here we fetch the data from the repository
 
     emit(LoadingState());
-    final response = await taskrepo.getTasks();
-    print('Hello massar');
+    final response = await taskrepo.getTasks(status);
 
     // you can check if the server returned an error
 
@@ -118,6 +117,7 @@ class TaskCubit extends Cubit<TodoState> {
   }
 
   Future<TaskModel> getOneTask(String id) async {
+    emit(LoadingState());
     final response = await taskrepo.getOneTask(id);
     emit(LoadedOneTask(oneTask: response));
     return response;

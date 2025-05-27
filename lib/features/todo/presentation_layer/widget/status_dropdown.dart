@@ -10,7 +10,7 @@ class StatuDropdown extends StatefulWidget {
 }
 
 class _StatuDropdownState extends State<StatuDropdown> {
-  List<String> items = ["waiting", "inprogress", "finished"];
+  List<String> items = ["waiting", "inProgress", "finished"];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _StatuDropdownState extends State<StatuDropdown> {
         );
       }).toList(),
       onChanged: (String? newValue) {
-        context.read<TaskCubit>().createTask?.priority = newValue;
+        context.read<TaskCubit>().createTask?.state = newValue;
         // context.read<TaskCubit>().selectedLevelPriority(newValue);
       },
     );
