@@ -9,7 +9,6 @@ import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
 import 'package:todo_app/features/todo/data_layer/repository/task_repository.dart';
 import 'package:todo_app/features/todo/domain_layer/entities/create_task_entites.dart';
 
-import '../../domain_layer/repository/base_task_repository.dart';
 import 'todo_state.dart';
 
 class TaskCubit extends Cubit<TodoState> {
@@ -84,11 +83,13 @@ class TaskCubit extends Cubit<TodoState> {
       await uploadTaskImage();
 
       await taskrepo.createTask(
-          image: createTask?.image ?? '',
-          title: createTask!.title!,
-          date: createTask!.date ?? '',
-          description: createTask!.descrption!,
-          priority: createTask!.priority!);
+        image: createTask?.image ?? '',
+        title: createTask!.title!,
+        date: createTask!.date ?? '',
+        description: createTask!.descrption!,
+        priority: createTask!.priority!,
+        state: createTask!.state,
+      );
       // emit(x);
     } on ApiErrorModel catch (error) {
       print(error.message);
@@ -109,7 +110,7 @@ class TaskCubit extends Cubit<TodoState> {
 
   Future<void> deleteTask(String taskId) async {
     //here we fetch the data from the repository
-    final response = await taskrepo.deleteTask(taskId: taskId);
+    await taskrepo.deleteTask(taskId: taskId);
     getTasks();
     // you can check if the server returned an error
 
@@ -136,6 +137,7 @@ class TaskCubit extends Cubit<TodoState> {
       priority: createTask!.priority!,
       date: createTask!.date!,
       image: createTask!.image ?? "",
+      state: createTask?.state ?? "",
     );
     return true;
   }

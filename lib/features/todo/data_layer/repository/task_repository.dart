@@ -31,6 +31,7 @@ class TaskRepository extends BaseTaskRepository {
     required String date,
     required String description,
     required String priority,
+    required String? state,
   }) async {
     try {
       final response = await dataSource.createTask(TaskModel(
@@ -56,8 +57,10 @@ class TaskRepository extends BaseTaskRepository {
   @override
   Future<void> deleteTask({required String taskId}) async {
     try {
-      final response = await dataSource.deleteTask(taskId);
-    } on ApiErrorModel catch (error) {}
+      await dataSource.deleteTask(taskId);
+    } on ApiErrorModel catch (error) {
+      print("Error: $error");
+    }
   }
 
   @override
@@ -73,9 +76,10 @@ class TaskRepository extends BaseTaskRepository {
     required String date,
     required String description,
     required String priority,
+    required String state,
   }) async {
     try {
-      final response = await dataSource.updateTask(
+      await dataSource.updateTask(
         id: id,
         task: TaskModel(
           id: id,
@@ -84,11 +88,11 @@ class TaskRepository extends BaseTaskRepository {
           title: title,
           description: description,
           priority: priority,
-          state: "", // أو استخدم القيمة الحالية إن كانت متوفرة
+          state: state, // أو استخدم القيمة الحالية إن كانت متوفرة
         ),
       );
-    } on ApiErrorModel catch (error) {
-      throw error;
+    } on ApiErrorModel catch (e) {
+      rethrow;
     }
   }
 }

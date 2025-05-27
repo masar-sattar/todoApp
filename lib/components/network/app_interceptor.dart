@@ -54,9 +54,9 @@ class AppInterceptor extends Interceptor {
     //   return null;
     // }
     print("ERROR INTERCEPTOR : ${err.message}");
-    print('hahahah');
+
     print(await AuthLocalDatasorce().getRefreshToken());
-    print('hahahah');
+
     // If response is 401 and refresh token is available
     if (err.response?.statusCode == 401 &&
         await AuthLocalDatasorce().getRefreshToken() != null) {

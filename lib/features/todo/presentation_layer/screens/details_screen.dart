@@ -1,15 +1,16 @@
-import 'dart:ffi';
+// ignore_for_file: duplicate_import, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:todo_app/components/utilities/app_colors.dart';
-import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
+
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_state.dart';
 import 'package:todo_app/features/todo/presentation_layer/screens/add_task/add_new_task.dart';
-import 'package:todo_app/features/todo/presentation_layer/screens/home_screen.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:todo_app/components/utilities/app_colors.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
@@ -54,17 +55,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         value: 'edit',
                         child: Text('Edit'),
                         onTap: () {
-                          Future.delayed(Duration.zero, () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AddNewTask(
-                                  isEdit: true,
-                                  task: state.oneTask,
-                                ),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddNewTask(
+                                isEdit: true,
+                                task: state.oneTask,
                               ),
-                            );
-                          });
+                            ),
+                          );
                         },
                       ),
                       PopupMenuItem<String>(
@@ -72,6 +71,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         child: Text('Delete'),
                         onTap: () async {
                           await context.read<TaskCubit>().deleteTask(widget.id);
+                          if (!context.mounted) return;
                           Navigator.pop(context); // خروج من صفحة التفاصيل
                           showDialog(
                             context: context,

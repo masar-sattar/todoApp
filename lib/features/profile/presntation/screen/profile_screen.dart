@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/features/profile/presntation/cubit/profile_cubit.dart';
@@ -47,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (state is LoadingProfile) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ProfileLoaded) {
-            final user = state.user;
+            // final user = state.user;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
               child: SingleChildScrollView(

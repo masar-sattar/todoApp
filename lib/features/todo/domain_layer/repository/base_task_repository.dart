@@ -1,8 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
-import 'package:todo_app/features/todo/presentation_layer/widget/task_item.dart';
-
 import '../../../../components/network/error_handler/api_error_model.dart';
 import '../../data_layer/model/task_models.dart';
 
@@ -17,6 +14,7 @@ abstract class BaseTaskRepository {
     required String description,
     required String date,
     required String priority,
+    required String? state,
   });
 
   Future<List<TaskModel>> getTasks();
@@ -31,5 +29,6 @@ abstract class BaseTaskRepository {
     required String date,
     required String image,
     required String priority,
+    required String state,
   });
 }

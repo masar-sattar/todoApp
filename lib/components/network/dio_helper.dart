@@ -93,7 +93,6 @@ class DioHelper {
       );
       return response;
     } catch (error) {
-      print('Put error: $error');
       throw Exception('Put request failed: $error');
     }
   }

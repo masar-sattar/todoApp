@@ -22,4 +22,9 @@ class AuthLocalDatasorce {
     String? toke = prefs.getString('refreshToken');
     return toke;
   }
+
+  Future<void> clearTokens() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
 }

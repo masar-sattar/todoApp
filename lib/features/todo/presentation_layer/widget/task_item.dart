@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import '../../data_layer/model/task_models.dart';
@@ -89,6 +91,21 @@ class TaskItem extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      // const Text(
+                      //   'Status: ',
+                      //   style: TextStyle(fontWeight: FontWeight.w500),
+                      // ),
+                      Text(
+                        task.state,
+                        style: TextStyle(
+                          color: _getStateColor(task.state),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(
                     task.description, // عرض الوصف
                     style: TextStyle(color: Colors.grey.shade600),
@@ -150,6 +167,19 @@ class TaskItem extends StatelessWidget {
         return Colors.orange;
       case 'High':
         return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Color _getStateColor(String state) {
+    switch (state) {
+      case 'Waiting':
+        return Colors.orange;
+      case 'InProgress':
+        return Colors.blue;
+      case 'Finished':
+        return Colors.green;
       default:
         return Colors.grey;
     }

@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:todo_app/components/network/error_handler/api_error_model.dart';
 import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
@@ -29,8 +28,6 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
 
   @override
   Future<List<TaskModel>> getTasks() async {
-    // TODO: Replace this with real data fetch - same as above
-
     List<TaskModel> tasks = [];
     try {
       final response = await DioHelper.getData(
@@ -47,7 +44,6 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
         throw ApiErrorModel.fromJson(response.data);
       }
     } catch (error) {
-      print('hell error');
       throw ApiErrorModel(message: error.toString());
     }
 
@@ -73,7 +69,7 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
   @override
   Future<void> deleteTask(String taskId) async {
     try {
-      final response = await DioHelper.deleteData(
+      await DioHelper.deleteData(
         endPoint: "/todos/$taskId",
       );
     } catch (error) {
@@ -81,6 +77,7 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
     }
   }
 
+  @override
   Future<TaskModel> getOneTask(String id) async {
     try {
       final response = await DioHelper.getData(

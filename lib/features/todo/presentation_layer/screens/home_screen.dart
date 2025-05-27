@@ -1,6 +1,9 @@
+// ignore_for_file: unused_import, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/components/utilities/app_colors.dart';
+import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
 
 import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
@@ -51,9 +54,16 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 16),
           GestureDetector(
             onTap: () {
-              Navigator.push(
+              AuthLocalDatasorce().clearTokens();
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => LoginScreenView()),
+
+              // );
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => LoginScreenView()),
+                (Route<dynamic> route) => false,
               );
             },
             child: const Icon(Icons.logout, color: AppColors.mainColor),
@@ -74,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: AppColors.mainColor,
             ),
             onPressed: () async {
-              final scannedId = await Navigator.push<String>(
+              await Navigator.push<String>(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const QRScannerScreen()),

@@ -8,7 +8,6 @@ import '../../../../components/network/error_handler/api_error_model.dart';
 import '../../domain_layer/entities/register_body.dart';
 import '../../domain_layer/repository/base_auth_repository.dart';
 import '../data_source/auth_remote_data_source.dart';
-import '../data_source/base_auth_remote_data_source.dart';
 
 class AuthRepository extends BaseAuthRepository {
   final AuthRemoteDataSource dataSource;

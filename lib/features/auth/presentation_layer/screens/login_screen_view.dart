@@ -4,11 +4,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 import 'package:todo_app/features/auth/presentation_layer/screens/register_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/screens/home_screen.dart';
-import 'package:todo_app/features/todo/presentation_layer/screens/home_screen.dart';
 
-import '../../../todo/presentation_layer/screens/home_screen.dart';
-
-import '../../../todo/presentation_layer/screens/home_screen.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/auth_states.dart';
 

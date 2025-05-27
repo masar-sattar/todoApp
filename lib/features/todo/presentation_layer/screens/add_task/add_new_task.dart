@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,13 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/components/componnet/text_component.dart';
 import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
 import 'package:todo_app/features/todo/domain_layer/entities/create_task_entites.dart';
+import 'package:todo_app/features/todo/presentation_layer/widget/status_dropdown.dart';
 
 import '../../../../../components/utilities/app_colors.dart';
 import '../../cubit/todo_cubit.dart';
 import '../../cubit/todo_state.dart';
 import '../../widget/date_pick.dart';
 import '../../widget/priorty_dropdown.dart';
-import '../home_screen.dart';
 
 class AddNewTask extends StatefulWidget {
   final TaskModel? task;
@@ -153,7 +155,11 @@ class _AddNewTaskState extends State<AddNewTask> {
               padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: const PriorityDropdown(),
             ),
-
+            if (widget.isEdit)
+              Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 20),
+                child: const StatuDropdown(),
+              ),
             const SizedBox(height: 8),
 
             const Text('Due date'),
@@ -185,7 +191,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                       taskCubit.createTask?.title = titleController.text;
                       taskCubit.createTask?.descrption =
                           descptionController.text;
-                      taskCubit.createTask?.date = dateController.text;
+                      // taskCubit.createTask?.date = dateController.text;
 
                       // if (widget.isEdit) {
                       //   await taskCubit.updateTask(widget.task!.id);
@@ -208,6 +214,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                       }
 
                       await taskCubit.getTasks();
+                      if (!context.mounted) return;
                       Navigator.pop(context);
                     },
                     child: Row(

@@ -6,6 +6,7 @@ class ProfileRepositry extends BaseProfileRepository {
   final RemoteProfileDataSorce dataprofile;
 
   ProfileRepositry({required this.dataprofile});
+  @override
   Future<UserModel> getProfile() async {
     return await dataprofile.getProfile();
   }

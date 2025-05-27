@@ -24,19 +24,19 @@ class TaskModel {
       "desc": description,
       "priority": priority,
       "dueDate": date,
-      "state": state, // <-- وأضفها هنا أيضاً
+      "status": state, // <-- وأضفها هنا أيضاً
     };
   }
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
       id: json['_id'],
-      image: "https://todo.iraqsapp.com/images/" + json['image'],
+      image: "https://todo.iraqsapp.com/images/${json['image']}",
       title: json['title'] ?? '',
       description: json['desc'] ?? '',
       priority: json['priority'] ?? '',
       date: json['dueDate'] ?? '',
-      state: json['state'] ?? 'all', // <-- قيمة افتراضية إن لم توجد
+      state: json['status'] ?? 'all', // <-- قيمة افتراضية إن لم توجد
     );
   }
 }
