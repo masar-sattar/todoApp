@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:todo_app/components/utilities/app_colors.dart';
 
 import 'package:todo_app/features/auth/presentation_layer/screens/register_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/screens/home_screen.dart';
@@ -60,33 +61,34 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                         // height: 250,
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(width: 326),
                     const Text(
                       "Login",
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 20),
-                    IntlPhoneField(
-                      decoration: const InputDecoration(
-                        labelText: 'Phone Number',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(),
+                    Container(
+                      child: IntlPhoneField(
+                        decoration: const InputDecoration(
+                          labelText: 'Phone Number',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
                         ),
+                        languageCode: "en",
+                        initialCountryCode: "IQ",
+                        onChanged: (phone) {
+                          print(phone.completeNumber);
+                        },
+                        onCountryChanged: (country) {
+                          print('Country changed to: ${country.name}');
+                        },
+                        onSaved: (phone) {
+                          phoneNumber = phone?.completeNumber;
+                        },
                       ),
-                      languageCode: "en",
-                      initialCountryCode: "IQ",
-                      onChanged: (phone) {
-                        print(phone.completeNumber);
-                      },
-                      onCountryChanged: (country) {
-                        print('Country changed to: ${country.name}');
-                      },
-                      onSaved: (phone) {
-                        phoneNumber = phone?.completeNumber;
-                      },
                     ),
-                    const SizedBox(height: 10),
                     const SizedBox(height: 10),
                     TextFormField(
                       decoration: InputDecoration(
@@ -113,7 +115,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.purple,
+                              backgroundColor: AppColors.mainColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -133,17 +135,6 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                                             password: password!,
                                           );
                                     }
-
-                                    // else {
-                                    //   print("Form not valid");
-                                    // }
-                                    // Navigator.pushAndRemoveUntil(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => const HomeScreen(),
-                                    //   ),
-                                    //   (route) => false,
-                                    // );
                                   },
                             child: state is AuthloadingState
                                 ? const SizedBox(
@@ -176,9 +167,25 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                         );
                       },
                       child: const Center(
-                        child: Text(
-                          "Don't have an account? Sign Up here",
-                          style: TextStyle(color: Colors.blue),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Didn’t have any account?",
+                              style: TextStyle(
+                                color: AppColors.NormaltGray,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              " Sign Up here",
+                              style: TextStyle(
+                                color: AppColors.mainColor,
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),

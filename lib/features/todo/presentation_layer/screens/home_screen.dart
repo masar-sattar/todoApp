@@ -1,19 +1,18 @@
-// ignore_for_file: unused_import, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:todo_app/components/utilities/app_colors.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
-
 import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_state.dart';
-import 'package:todo_app/features/todo/presentation_layer/screens/details_screen.dart';
+// import 'package:todo_app/features/todo/presentation_layer/screens/details_screen.dart';
 import 'package:todo_app/features/todo/presentation_layer/screens/qr_scanner_screen.dart';
-
 import '../widget/task_item.dart';
 import 'add_task/add_new_task.dart';
 import '../../../profile/presntation/screen/profile_screen.dart';
+
+BuildContext? mainContext;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,31 +30,48 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   String selectedItem = "";
+  int selectedIndex = 0;
 
   @override
   void initState() {
     selectedItem = list[0]['value']!;
     context.read<TaskCubit>().getTasks();
+    mainContext = context;
     super.initState();
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   context.read<TaskCubit>().getTasks();
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text('Logo'),
+        title: const Text(
+          'Logo',
+          style: TextStyle(),
+        ),
         actions: [
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
-            },
-            child:
-                const Icon(Icons.person, size: 30, color: AppColors.mainColor),
-          ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileScreen()),
+                );
+              },
+              child:
+                  // const Icon(Icons.person, size: 30, color: AppColors.mainColor),
+                  SvgPicture.asset(
+                'assets/svgs/Frame.svg',
+                color: Colors.black,
+                width: 24,
+                height: 24,
+              )),
           const SizedBox(width: 16),
           GestureDetector(
             onTap: () {
@@ -78,8 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
           FloatingActionButton(
             heroTag: "Qr",
             elevation: 1,
-            mini: true,
-            backgroundColor: AppColors.lightPurpleColor,
+            backgroundColor: AppColors.LightPurple,
             child: Icon(
               Icons.qr_code,
               color: AppColors.mainColor,
@@ -98,7 +113,10 @@ class _HomeScreenState extends State<HomeScreen> {
             heroTag: "Add",
             backgroundColor: AppColors.mainColor,
             elevation: 1,
-            child: const Icon(Icons.add),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -129,31 +147,108 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 40,
               child: TabBar(
-                onTap: (index) {
-                  setState(() {
-                    selectedItem = list[index]["value"]!;
-                    context.read<TaskCubit>().getTasks(status: selectedItem);
-                  });
-                },
-                tabs: list
-                    .map(
-                      (item) => Tab(
-                        child: Container(
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            color: item["value"] == selectedItem
-                                ? Colors.transparent
-                                : AppColors.lightPurpleColor,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Center(
-                            child: Text(item["label"]!),
-                          ),
+                  isScrollable: false,
+                  tabAlignment: TabAlignment.center,
+                  dividerHeight: 0,
+                  labelColor: Colors.white,
+                  indicator: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  unselectedLabelColor: AppColors.FontGray,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  onTap: (index) {
+                    setState(() {
+                      selectedItem = list[index]["value"]!;
+                      selectedIndex = index;
+                      context.read<TaskCubit>().getTasks(status: selectedItem);
+                    });
+                  },
+                  tabs: [
+                    Tab(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: selectedIndex == 0
+                              ? AppColors.mainColor
+                              : AppColors.LightPurple,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 2),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(list[0]["label"] ?? "",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 16)),
+                          ],
                         ),
                       ),
-                    )
-                    .toList(),
-              ),
+                    ),
+                    Tab(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: selectedIndex == 1
+                              ? AppColors.mainColor
+                              : AppColors.LightPurple,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 2),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(list[1]["label"] ?? "",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: selectedIndex == 2
+                              ? AppColors.mainColor
+                              : AppColors.LightPurple,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 2),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(list[2]["label"] ?? "",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: selectedIndex == 3
+                              ? AppColors.mainColor
+                              : AppColors.LightPurple,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        margin: EdgeInsets.symmetric(horizontal: 2),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(list[3]["label"] ?? "",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
             ),
             const SizedBox(height: 12),
             Expanded(

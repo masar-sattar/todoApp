@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:todo_app/components/utilities/app_colors.dart';
 
@@ -70,28 +71,62 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         value: 'delete',
                         child: Text('Delete'),
                         onTap: () async {
-                          await context.read<TaskCubit>().deleteTask(widget.id);
-                          if (!context.mounted) return;
-                          Navigator.pop(context); // خروج من صفحة التفاصيل
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Success'),
-                                content: Text('Delete done'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          Future.delayed(Duration.zero, () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext dialogContext) {
+                                return AlertDialog(
+                                  title: Text('Confirm Deletion'),
+                                  content: Text(
+                                      'Are you sure you want to delete this task?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(dialogContext).pop();
+                                      },
+                                      child: Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        Navigator.of(dialogContext).pop();
+
+                                        await context
+                                            .read<TaskCubit>()
+                                            .deleteTask(widget.id);
+
+                                        if (!context.mounted) return;
+                                        Navigator.pop(context);
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext
+                                              successDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('Success'),
+                                              content: Text('Delete done'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(
+                                                            successDialogContext)
+                                                        .pop();
+                                                  },
+                                                  child: Text('OK'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          });
                         },
-                      ),
+                      )
                     ],
                   );
                 } else {
@@ -137,7 +172,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Color(0xFFEFE6FF),
-                          hintText: "End Date",
+                          hintText: task.date.isNotEmpty
+                              ? DateFormat("dd/MM/yyyy")
+                                  .format(DateTime.parse(task.date))
+                              : 'No date',
                           suffixIcon: Icon(Icons.calendar_month,
                               color: AppColors.mainColor),
                           border: OutlineInputBorder(

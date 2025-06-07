@@ -19,7 +19,6 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
       ),
     );
 
-
     try {
       Response response = await dio.post(
         '/auth/register',
@@ -35,9 +34,10 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
       throw ApiErrorModel(message: error.toString());
     }
   }
+
   @override
   Future<TokensModel> loginUser({
-    required  String phoneNumber,
+    required String phoneNumber,
     required String passWord,
   }) async {
     // dio function for register
@@ -47,13 +47,9 @@ class AuthRemoteDataSource extends BaseAuthRemoteDataSource {
       ),
     );
 
-
     try {
-      Response response = await dio.post(
-        '/auth/login',
-        data: json.encode({"phone":phoneNumber,"password":passWord})
-
-      );
+      Response response = await dio.post('/auth/login',
+          data: json.encode({"phone": phoneNumber, "password": passWord}));
 
       if (response.statusCode == 201) {
         return TokensModel.fromJson(response.data);

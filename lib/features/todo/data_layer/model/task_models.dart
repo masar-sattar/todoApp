@@ -35,7 +35,7 @@ class TaskModel {
       title: json['title'] ?? '',
       description: json['desc'] ?? '',
       priority: json['priority'] ?? '',
-      date: json['dueDate'] ?? '',
+      date: json['updatedAt'] ?? '',
       state: json['status'] ?? 'all', // <-- قيمة افتراضية إن لم توجد
     );
   }

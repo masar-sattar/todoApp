@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:todo_app/components/utilities/app_colors.dart';
+import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
+import 'package:todo_app/features/todo/presentation_layer/screens/add_task/add_new_task.dart';
+import 'package:todo_app/features/todo/presentation_layer/screens/home_screen.dart';
 
 import '../../data_layer/model/task_models.dart';
 import '../screens/details_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class TaskItem extends StatelessWidget {
+class TaskItem extends StatefulWidget {
   final TaskModel task;
 
   const TaskItem({super.key, required this.task});
 
+  @override
+  State<TaskItem> createState() => _TaskItemState();
+}
+
+class _TaskItemState extends State<TaskItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -19,7 +30,7 @@ class TaskItem extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) {
               return DetailsScreen(
-                id: task.id,
+                id: widget.task.id,
               );
             },
           ),
@@ -30,16 +41,18 @@ class TaskItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(
-              imageUrl: task.image,
-              width: 48,
-              height: 48,
-              placeholder: (context, url) => Container(
-                color: Colors.grey[200],
-                child: Icon(Icons.task, color: Colors.grey[400]),
+            ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: widget.task.image,
+                width: 70,
+                height: 70,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[200],
+                  child: Icon(Icons.task, color: Colors.grey[400]),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                fit: BoxFit.cover,
               ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              fit: BoxFit.cover,
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -49,51 +62,131 @@ class TaskItem extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          task.title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.task.title,
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 14, vertical: 5),
                         decoration: BoxDecoration(
-                          color: _getStateColor(task.state),
-                          borderRadius: BorderRadius.circular(5),
+                          color: _getStateColor(widget.task.state),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
-                          task.state,
-                          style: TextStyle(
-                            color: _getStateTextColor(task.state),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                        child: Center(
+                          child: Text(
+                            widget.task.state,
+                            style: TextStyle(
+                              color: _getStateTextColor(widget.task.state),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
+                      ),
+                      PopupMenuButton<String>(
+                        icon: Icon(Icons.more_vert),
+                        onSelected: (String value) {},
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                          PopupMenuItem<String>(
+                            value: 'edit',
+                            child: Text('Edit'),
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddNewTask(
+                                      isEdit: true, task: widget.task),
+                                ),
+                              );
+                              // print('hello masar');
+                              mainContext!.read<TaskCubit>().getTasks();
+                            },
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Text('Delete'),
+                            onTap: () async {
+                              Future.delayed(Duration.zero, () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext dialogContext) {
+                                    return AlertDialog(
+                                      title: Text('Confirm Deletion'),
+                                      content: Text(
+                                          'Are you sure you want to delete this task?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(dialogContext).pop();
+                                          },
+                                          child: Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            Navigator.of(dialogContext).pop();
+
+                                            await context
+                                                .read<TaskCubit>()
+                                                .deleteTask(widget.task.id);
+
+                                            if (!context.mounted) return;
+                                            Navigator.pop(context);
+
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext
+                                                  successDialogContext) {
+                                                return AlertDialog(
+                                                  title: Text('Success'),
+                                                  content: Text('Delete done'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(
+                                                                successDialogContext)
+                                                            .pop();
+                                                      },
+                                                      child: Text('OK'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              });
+                            },
+                          )
+                        ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       task.state,
-                  //       style: TextStyle(
-                  //         color: _getStateColor(task.state),
-                  //         fontWeight: FontWeight.w500,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  Text(
-                    task.description, // عرض الوصف
-                    style: TextStyle(color: Colors.grey.shade600),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 60),
+                    child: Text(
+                      widget.task.description, // عرض الوصف
+                      style:
+                          TextStyle(color: Colors.grey.shade600, fontSize: 18),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -103,21 +196,29 @@ class TaskItem extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.flag_outlined,
-                            color: _getPriorityTextColor(
-                                task.priority), // اللون يتبع أولوية المهمة
-                            size: 16,
+                            color: _getPriorityTextColor(widget
+                                .task.priority), // اللون يتبع أولوية المهمة
+                            size: 30,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            task.priority,
+                            widget.task.priority,
                             style: TextStyle(
-                                color: _getPriorityTextColor(task.priority)),
+                                color: _getPriorityTextColor(
+                                    widget.task.priority)),
                           ),
                         ],
                       ),
-                      Text(
-                        task.date.isNotEmpty ? task.date : 'No date',
-                        style: const TextStyle(color: Colors.black),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 50.0),
+                        child: Text(
+                          widget.task.date.isNotEmpty
+                              ? DateFormat("dd/MM/yyyy")
+                                  .format(DateTime.parse(widget.task.date))
+                              : 'No date',
+                          style:
+                              const TextStyle(color: AppColors.FontGrayLight),
+                        ),
                       ),
                     ],
                   ),
@@ -133,24 +234,24 @@ class TaskItem extends StatelessWidget {
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case 'low':
-        return Colors.blueAccent.withOpacity(0.2);
+        return Color(0xFF0087FF);
       case 'medium':
-        return Colors.orange.withOpacity(0.2);
+        return Color(0xFF5F33E1);
       case 'high':
-        return Colors.red.withOpacity(0.2);
+        return Color(0xFFFF7D53);
       default:
-        return Colors.grey.withOpacity(0.2);
+        return Colors.grey;
     }
   }
 
   Color _getPriorityTextColor(String priority) {
     switch (priority) {
       case 'low':
-        return Colors.blueAccent;
+        return Color(0xFF0087FF);
       case 'medium':
-        return Colors.orange;
+        return Color(0xFF5F33E1);
       case 'high':
-        return Colors.red;
+        return Color(0xFFFF7D53);
       default:
         return Colors.grey;
     }
@@ -159,11 +260,11 @@ class TaskItem extends StatelessWidget {
   Color _getStateColor(String State) {
     switch (State) {
       case 'waiting':
-        return Colors.blueAccent.withOpacity(0.2);
+        return Color(0xFFFFE4F2);
       case 'inProgress':
-        return Colors.orange.withOpacity(0.2);
+        return Color(0xFFF0ECFF);
       case 'finished':
-        return Colors.red.withOpacity(0.2);
+        return Color(0xFFE3F2FF);
       default:
         return Colors.grey.withOpacity(0.2);
     }
@@ -172,11 +273,11 @@ class TaskItem extends StatelessWidget {
   Color _getStateTextColor(String state) {
     switch (state) {
       case 'waiting':
-        return Colors.blueAccent;
+        return Color(0xFFFF7D53);
       case 'inProgress':
-        return Colors.orange;
+        return Color(0xFF5F33E1);
       case 'finished':
-        return Colors.red;
+        return Color(0xFF0087FF);
       default:
         return Colors.grey;
     }

@@ -8,36 +8,34 @@ class TextComponent extends StatelessWidget {
     this.colorFont,
     this.hintText,
     this.maxLines = 1,
-
-
+    this.validator,
   });
   final String? labelField;
   final TextEditingController? controller;
-  final Color? colorFont ;
-  final String? hintText ;
+  final Color? colorFont;
+  final String? hintText;
   final int maxLines;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
-      validator: (value) {
-        if (value?.isEmpty ?? true) {
-          return 'field required';
-        }
-        return null;
-      },
-        controller: controller,
+      validator: validator ??
+          (value) {
+            if (value?.trim().isEmpty ?? true) {
+              return 'This field is required';
+            }
+            return null;
+          },
+      controller: controller,
       maxLines: maxLines,
-        decoration: InputDecoration(
+      decoration: InputDecoration(
         labelText: labelField,
         hintText: hintText,
-
         border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
   }
 }
-

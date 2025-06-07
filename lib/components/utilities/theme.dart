@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
+  fontFamily: "DMSans",
   tabBarTheme: TabBarTheme(
     indicatorSize: TabBarIndicatorSize.tab,
     indicator: BoxDecoration(
@@ -11,5 +12,4 @@ ThemeData lightTheme = ThemeData(
     labelPadding: EdgeInsets.zero,
     overlayColor: WidgetStateColor.transparent,
   ),
-
 );

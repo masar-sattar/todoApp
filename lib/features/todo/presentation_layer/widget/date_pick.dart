@@ -53,7 +53,7 @@ class _DatePickState extends State<DatePick> {
 
             if (pickedDate != null) {
               String formattedDate =
-                  DateFormat("yyyy-MM-dd").format(pickedDate);
+                  DateFormat("dd/MM/yyyy").format(pickedDate);
 
               setState(() {
                 dateController.text = formattedDate;

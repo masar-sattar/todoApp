@@ -98,13 +98,16 @@ class TaskCubit extends Cubit<TodoState> {
 
   Future<void> getTasks({int page = 1, String status = "all"}) async {
     //here we fetch the data from the repository
+    try {
+      emit(LoadingState());
+      final response = await taskrepo.getTasks(status);
 
-    emit(LoadingState());
-    final response = await taskrepo.getTasks(status);
+      // you can check if the server returned an error
 
-    // you can check if the server returned an error
-
-    emit(LoadedState(tasks: response));
+      emit(LoadedState(tasks: response));
+    } on ApiErrorModel catch (error) {
+      print(error.message);
+    }
   }
 
   Future<void> deleteTask(String taskId) async {

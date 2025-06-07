@@ -9,11 +9,12 @@ class DioHelper {
   static Dio _dioInstance() {
     // if (_dio == null)
     //  {
+    print(token);
     _dio = Dio(
       BaseOptions(
           baseUrl: "https://todo.iraqsapp.com",
-          connectTimeout: const Duration(seconds: 15),
-          receiveTimeout: const Duration(seconds: 15),
+          // connectTimeout: const Duration(seconds: 15),
+          // receiveTimeout: const Duration(seconds: 15),
           headers: {'Authorization': "Bearer $token"}),
     )..interceptors.add(AppInterceptor());
     // }
