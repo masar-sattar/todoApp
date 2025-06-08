@@ -191,48 +191,54 @@ class _AddNewTaskState extends State<AddNewTask> {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          // تحقق من التاريخ
-                          // if (dateController.text.trim().isEmpty) {
-                          //   ScaffoldMessenger.of(context).showSnackBar(
-                          //     SnackBar(
-                          //         content: Text('Please fill empty field')),
-                          //   );
-                          //   // return;
-                          // }
-
-                          // تحقق من الصورة
-                          if (context.read<TaskCubit>().taskImage == null &&
-                              !widget.isEdit) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Please add an image')),
-                            );
-                            return;
-                          }
-
-                          final taskCubit = context.read<TaskCubit>();
-                          taskCubit.createTask ??= CreateTaskEntites();
-                          taskCubit.createTask?.title = titleController.text;
-                          taskCubit.createTask?.descrption =
-                              descptionController.text;
-                          taskCubit.createTask?.date = dateController.text;
-
-                          bool success = false;
-
-                          if (widget.isEdit) {
-                            success =
-                                await taskCubit.updateTask(widget.task!.id);
-                            if (success) {
-                              await taskCubit.getOneTask(widget.task!.id);
-                            }
-                          } else {
-                            await taskCubit.addTask();
-                            await taskCubit.getTasks();
-                          }
-
-                          if (!context.mounted) return;
-                          Navigator.pop(context);
+                        if (!_formKey.currentState!.validate()) {
+                          return;
                         }
+                        // تحقق من التاريخ
+                        if (dateController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please fill empty field')),
+                          );
+                          return;
+                        }
+
+                        // تحقق من الصورة
+                        if (context.read<TaskCubit>().taskImage == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please add an image')),
+                          );
+                          return;
+                        }
+                        if (context.read<TaskCubit>().createTask?.priority ==
+                            null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please  select priorty ')),
+                          );
+                          return;
+                        }
+
+                        final taskCubit = context.read<TaskCubit>();
+                        taskCubit.createTask ??= CreateTaskEntites();
+                        taskCubit.createTask?.title = titleController.text;
+                        taskCubit.createTask?.descrption =
+                            descptionController.text;
+                        taskCubit.createTask?.date = dateController.text;
+
+                        bool success = false;
+
+                        if (widget.isEdit) {
+                          success = await taskCubit.updateTask(widget.task!.id);
+                          if (success) {
+                            await taskCubit.getOneTask(widget.task!.id);
+                          }
+                        } else {
+                          await taskCubit.addTask();
+                          await taskCubit.getTasks();
+                        }
+
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                        // }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

@@ -5,19 +5,23 @@ class DioHelper {
   static Dio? _dio;
   static String? token;
 
-  /// إنشاء أو إرجاع نسخة موجودة من Dio
-  static Dio _dioInstance() {
-    // if (_dio == null)
-    //  {
-    print(token);
+  /// إعداد Dio حسب وجود التوكن والهيدرز المخصصة
+  static Dio _dioInstance({Map<String, dynamic>? customHeaders}) {
+    final headers = {
+      if (token != null) 'Authorization': 'Bearer $token',
+      ...?customHeaders,
+    };
+
     _dio = Dio(
       BaseOptions(
-          baseUrl: "https://todo.iraqsapp.com",
-          // connectTimeout: const Duration(seconds: 15),
-          // receiveTimeout: const Duration(seconds: 15),
-          headers: {'Authorization': "Bearer $token"}),
+        baseUrl: "https://todo.iraqsapp.com",
+        headers: headers,
+        // يمكنك إضافة timeouts لو أردت:
+        // connectTimeout: const Duration(seconds: 15),
+        // receiveTimeout: const Duration(seconds: 15),
+      ),
     )..interceptors.add(AppInterceptor());
-    // }
+
     return _dio!;
   }
 
@@ -27,10 +31,10 @@ class DioHelper {
     required dynamic body,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? query,
+    bool sendAuth = true,
   }) async {
     try {
-      final dio = _dioInstance();
-      // dio.options.headers = headers ?? {};
+      final dio = _dioInstance(customHeaders: sendAuth ? headers : {});
       final response = await dio.post(
         endPoint,
         queryParameters: query,
@@ -38,43 +42,28 @@ class DioHelper {
       );
       return response;
     } catch (error) {
-      print('Post error: $error');
-      throw Exception('Post request failed: $error');
+      print('POST error: $error');
+      throw Exception('POST request failed: $error');
     }
   }
 
-  /// DELETE request
-  static Future<Response> deleteData({
-    required String endPoint,
-    Map<String, dynamic>? headers,
-  }) async {
-    try {
-      // _dioInstance().options.headers = headers ?? {};
-      final response = await _dioInstance().delete(endPoint);
-      return response;
-    } catch (error) {
-      print('Delete error: $error');
-      throw Exception('Delete request failed: $error');
-    }
-  }
-
-  //get requset
+  /// GET request
   static Future<Response> getData({
     required String endPoint,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? query,
+    bool sendAuth = true,
   }) async {
     try {
-      final dio = _dioInstance();
-      // dio.options.headers = headers ?? {};
+      final dio = _dioInstance(customHeaders: sendAuth ? headers : {});
       final response = await dio.get(
         endPoint,
         queryParameters: query,
       );
       return response;
     } catch (error) {
-      print('Post error: $error');
-      throw Exception('Post request failed: $error');
+      print('GET error: $error');
+      throw Exception('GET request failed: $error');
     }
   }
 
@@ -84,17 +73,45 @@ class DioHelper {
     required dynamic body,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? query,
+    bool sendAuth = true,
   }) async {
     try {
-      _dioInstance().options.headers = headers ?? {};
-      final response = await _dioInstance().put(
+      final dio = _dioInstance(customHeaders: sendAuth ? headers : {});
+      final response = await dio.put(
         endPoint,
         queryParameters: query,
         data: body,
       );
       return response;
     } catch (error) {
-      throw Exception('Put request failed: $error');
+      print('PUT error: $error');
+      throw Exception('PUT request failed: $error');
     }
+  }
+
+  /// DELETE request
+  static Future<Response> deleteData({
+    required String endPoint,
+    Map<String, dynamic>? headers,
+    bool sendAuth = true,
+  }) async {
+    try {
+      final dio = _dioInstance(customHeaders: sendAuth ? headers : {});
+      final response = await dio.delete(endPoint);
+      return response;
+    } catch (error) {
+      print('DELETE error: $error');
+      throw Exception('DELETE request failed: $error');
+    }
+  }
+
+  /// تعيين التوكن بعد تسجيل الدخول
+  static void setToken(String newToken) {
+    token = newToken;
+  }
+
+  /// حذف التوكن (عند تسجيل الخروج مثلاً)
+  static void clearToken() {
+    token = null;
   }
 }

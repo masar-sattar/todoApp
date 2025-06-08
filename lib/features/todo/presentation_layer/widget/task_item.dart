@@ -141,7 +141,7 @@ class _TaskItemState extends State<TaskItem> {
                                                 .deleteTask(widget.task.id);
 
                                             if (!context.mounted) return;
-                                            Navigator.pop(context);
+                                            // Navigator.pop(context);
 
                                             showDialog(
                                               context: context,
@@ -198,7 +198,7 @@ class _TaskItemState extends State<TaskItem> {
                             Icons.flag_outlined,
                             color: _getPriorityTextColor(widget
                                 .task.priority), // اللون يتبع أولوية المهمة
-                            size: 30,
+                            size: 25,
                           ),
                           const SizedBox(width: 4),
                           Text(

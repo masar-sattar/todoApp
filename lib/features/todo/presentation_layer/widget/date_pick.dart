@@ -16,13 +16,13 @@ class DatePick extends StatefulWidget {
 }
 
 class _DatePickState extends State<DatePick> {
-  TextEditingController dateController = TextEditingController();
+  // TextEditingController dateController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     final existingDate = context.read<TaskCubit>().createTask?.date;
-    dateController.text = existingDate ?? '';
+    widget.controller.text = existingDate ?? '';
   }
 
   @override
@@ -31,7 +31,7 @@ class _DatePickState extends State<DatePick> {
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
       child: Center(
         child: TextField(
-          controller: dateController,
+          controller: widget.controller,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -56,7 +56,7 @@ class _DatePickState extends State<DatePick> {
                   DateFormat("dd/MM/yyyy").format(pickedDate);
 
               setState(() {
-                dateController.text = formattedDate;
+                widget.controller.text = formattedDate;
               });
               context.read<TaskCubit>().createTask?.date = formattedDate;
             } else {

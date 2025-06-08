@@ -20,7 +20,8 @@ class _LoginScreenViewState extends State<LoginScreenView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? phoneNumber;
   String? password;
-  @override
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     // return BlocProvider(
@@ -90,14 +91,47 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    // TextFormField(
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Password',
+
+                    //     border: OutlineInputBorder(
+
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+
+                    //   ),
+                    //   obscureText: true,
+                    //   validator: (value) {
+                    //     if (value == null || value.isEmpty) {
+                    //       return 'Please enter your password';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   onSaved: (value) {
+                    //     password = value;
+                    //   },
+                    // ),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Password',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
                       ),
-                      obscureText: true,
+                      obscureText: _obscureText,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
@@ -108,6 +142,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                         password = value;
                       },
                     ),
+
                     const SizedBox(height: 20),
                     BlocBuilder<AuthCubit, AuthStates>(
                       builder: (context, state) {

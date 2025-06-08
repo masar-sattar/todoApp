@@ -42,7 +42,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Task Details'),
+          title: Text(
+            'Task Details',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           actions: [
             BlocBuilder<TaskCubit, TodoState>(
               builder: (context, state) {
@@ -171,13 +174,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       TextFormField(
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xFFEFE6FF),
+                          fillColor: AppColors.LightPurple,
                           hintText: task.date.isNotEmpty
                               ? DateFormat("dd/MM/yyyy")
                                   .format(DateTime.parse(task.date))
                               : 'No date',
                           suffixIcon: Icon(Icons.calendar_month,
                               color: AppColors.mainColor),
+                          focusColor: AppColors.mainColor,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
@@ -188,10 +192,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       TextFormField(
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xFFEFE6FF),
+                          fillColor: AppColors.LightPurple,
                           hintText: task.state,
-                          suffixIcon: Icon(Icons.arrow_drop_down,
-                              color: AppColors.mainColor),
+                          hintStyle: TextStyle(
+                              color: AppColors.mainColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                          suffixIcon: Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColors.mainColor,
+                            size: 30.0,
+                          ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
@@ -204,21 +215,31 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           prefixIcon: Icon(Icons.flag_outlined,
                               color: AppColors.mainColor),
                           filled: true,
-                          fillColor: Color(0xFFEFE6FF),
+                          fillColor: AppColors.LightPurple,
                           hintText: task.priority,
-                          suffixIcon: Icon(Icons.arrow_drop_down,
-                              color: AppColors.mainColor),
+                          hintStyle: TextStyle(
+                              color: AppColors.mainColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                          suffixIcon: Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColors.mainColor,
+                            size: 30,
+                          ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
                         readOnly: true,
                         onTap: () {},
                       ),
+                      SizedBox(
+                        height: 25,
+                      ),
                       Center(
                         child: QrImageView(
                           data: task.id,
                           version: QrVersions.auto,
-                          size: 200.0,
+                          size: 340.0,
                         ),
                       ),
                     ],
