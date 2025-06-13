@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:todo_app/components/network/error_handler/api_error_model.dart';
+import 'package:todo_app/core/network/error_handler/api_error_model.dart';
 import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
 
-import '../../../../components/network/dio_helper.dart';
+import '../../../../core/network/dio_helper.dart';
 import 'base_remote_task_data_source.dart';
 
 class RemoteTaskDataSource extends BaseRemoteTaskDataSource {

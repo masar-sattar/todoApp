@@ -5,12 +5,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/components/componnet/text_component.dart';
+import 'package:todo_app/core/componnet/text_component.dart';
 import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
 import 'package:todo_app/features/todo/domain_layer/entities/create_task_entites.dart';
 import 'package:todo_app/features/todo/presentation_layer/widget/status_dropdown.dart';
 
-import '../../../../../components/utilities/app_colors.dart';
+import '../../../../../core/utilities/app_colors.dart';
 import '../../cubit/todo_cubit.dart';
 import '../../cubit/todo_state.dart';
 import '../../widget/date_pick.dart';

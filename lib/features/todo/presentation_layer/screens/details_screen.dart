@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:todo_app/components/utilities/app_colors.dart';
+import 'package:todo_app/core/utilities/app_colors.dart';
 
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_state.dart';
@@ -13,7 +13,7 @@ import 'package:todo_app/features/todo/presentation_layer/screens/add_task/add_n
 import 'package:flutter/material.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:todo_app/components/utilities/app_colors.dart';
+import 'package:todo_app/core/utilities/app_colors.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_state.dart';
 import 'package:todo_app/features/todo/presentation_layer/screens/add_task/add_new_task.dart';

@@ -1,5 +1,5 @@
-import 'package:todo_app/components/network/dio_helper.dart';
-import 'package:todo_app/components/network/error_handler/api_error_model.dart';
+import 'package:todo_app/core/network/dio_helper.dart';
+import 'package:todo_app/core/network/error_handler/api_error_model.dart';
 import 'package:todo_app/features/profile/data%20layer/profile_model/profile_model.dart';
 import 'package:todo_app/features/profile/data%20sorce/base_profile_data_sorce.dart';
 

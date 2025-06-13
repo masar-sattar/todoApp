@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import '../../../../components/network/error_handler/api_error_model.dart';
+import '../../../../core/network/error_handler/api_error_model.dart';
 import '../../data_layer/model/task_models.dart';
 
 abstract class BaseTaskRepository {

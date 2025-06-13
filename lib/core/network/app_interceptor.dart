@@ -41,7 +41,7 @@
 //   }
 // }
 import 'package:dio/dio.dart';
-import 'package:todo_app/components/network/dio_helper.dart';
+import 'package:todo_app/core/network/dio_helper.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
 
 class AppInterceptor extends Interceptor {

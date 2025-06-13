@@ -294,7 +294,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:todo_app/components/utilities/app_colors.dart';
+import 'package:todo_app/core/utilities/app_colors.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
 import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
@@ -453,24 +453,27 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  for (int i = 0; i < list.length; i++)
-                    item(
-                        title: list[i],
-                        isSelected: list[i] == selectedItem,
-                        onTap: () {
-                          selectedItem = list[i];
-                          setState(() {});
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    for (int i = 0; i < list.length; i++)
+                      item(
+                          title: list[i],
+                          isSelected: list[i] == selectedItem,
+                          onTap: () {
+                            selectedItem = list[i];
+                            setState(() {});
 
-                          String value = selectedItem[0].toLowerCase() +
-                              selectedItem.substring(1);
+                            String value = selectedItem[0].toLowerCase() +
+                                selectedItem.substring(1);
 
-                          context.read<TaskCubit>().getTasks(status: value);
-                        })
-                ],
+                            context.read<TaskCubit>().getTasks(status: value);
+                          })
+                  ],
+                ),
               ),
             ),
             // SizedBox(

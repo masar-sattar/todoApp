@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:todo_app/components/network/dio_helper.dart';
+import 'package:todo_app/core/network/dio_helper.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
 
 import 'package:todo_app/features/auth/domain_layer/entities/tokens.dart';
 
-import '../../../../components/network/error_handler/api_error_model.dart';
+import '../../../../core/network/error_handler/api_error_model.dart';
 import '../../domain_layer/entities/register_body.dart';
 import '../../domain_layer/repository/base_auth_repository.dart';
 import '../data_source/auth_remote_data_source.dart';

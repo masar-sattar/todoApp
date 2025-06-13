@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import '../../../../components/network/error_handler/api_error_model.dart';
+import '../../../../core/network/error_handler/api_error_model.dart';
 import '../../domain_layer/repository/base_task_repository.dart';
 import '../data_source/remote_task_data_source.dart';
 import '../model/task_models.dart';

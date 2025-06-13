@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:todo_app/components/network/error_handler/api_error_model.dart';
+import 'package:todo_app/core/network/error_handler/api_error_model.dart';
 import 'package:todo_app/features/todo/data_layer/model/task_models.dart';
 import 'package:todo_app/features/todo/data_layer/repository/task_repository.dart';
 import 'package:todo_app/features/todo/domain_layer/entities/create_task_entites.dart';

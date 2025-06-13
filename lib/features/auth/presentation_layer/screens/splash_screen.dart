@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app/components/utilities/app_colors.dart';
+import 'package:todo_app/core/utilities/app_colors.dart';
 import 'package:todo_app/features/auth/presentation_layer/cubit/auth_cubit.dart';
 import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/screens/home_screen.dart';

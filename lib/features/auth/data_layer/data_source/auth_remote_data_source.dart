@@ -67,7 +67,7 @@ import 'package:dio/dio.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/base_auth_remote_data_source.dart';
 import 'package:todo_app/features/auth/data_layer/models/tokens_model.dart';
 
-import '../../../../components/network/error_handler/api_error_model.dart';
+import '../../../../core/network/error_handler/api_error_model.dart';
 import '../../domain_layer/entities/register_body.dart';
 
 class AuthRemoteDataSource extends BaseAuthRemoteDataSource {

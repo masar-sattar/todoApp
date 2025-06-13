@@ -5,7 +5,7 @@ import 'package:todo_app/features/auth/data_layer/repository/auth_repository.dar
 import 'package:todo_app/features/auth/domain_layer/entities/register_body.dart';
 import 'package:todo_app/features/auth/presentation_layer/cubit/auth_states.dart';
 import 'package:todo_app/features/auth/presentation_layer/widgets/level_dropdown.dart';
-import 'package:todo_app/components/componnet/text_component.dart';
+import 'package:todo_app/core/componnet/text_component.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/auth_remote_data_source.dart';
 import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasorce.dart';
 

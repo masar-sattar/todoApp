@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../components/network/error_handler/api_error_model.dart';
+import '../../../../core/network/error_handler/api_error_model.dart';
 import '../entities/register_body.dart';
 import '../entities/tokens.dart';
 
