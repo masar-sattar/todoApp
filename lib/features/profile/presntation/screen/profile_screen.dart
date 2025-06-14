@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //     } else if (state is ProfileLoaded) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        centerTitle: false,
         title: Text(
           "profile",
           style: TextStyle(
@@ -57,8 +57,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FieldProfile(
-                        labelText: 'Name', lableTitle: state.user.displayName),
-                    SizedBox(height: 10),
+                        labelText: 'NAME', lableTitle: state.user.displayName),
+
                     // FieldProfile(
                     //   labelText: 'Phone',
                     //   lableTitle: state.user.username,
@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //   ),
                     // ),
                     FieldProfile(
-                      labelText: 'Phone',
+                      labelText: 'PHONE',
                       lableTitle: state.user.username,
                       trailing: IconButton(
                         icon: const Icon(Icons.copy, color: Colors.deepPurple),
@@ -86,16 +86,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
 
-                    SizedBox(height: 10),
                     FieldProfile(
-                        labelText: 'Level', lableTitle: state.user.level),
-                    SizedBox(height: 10),
+                        labelText: 'LEVEL', lableTitle: state.user.level),
+
                     FieldProfile(
-                        labelText: 'Years of Experience',
+                        labelText: 'YEARS OF EXPERIENCE',
                         lableTitle: state.user.experienceYears.toString()),
-                    SizedBox(height: 10),
+
                     FieldProfile(
-                        labelText: 'Location', lableTitle: state.user.address)
+                        labelText: 'LOCATION', lableTitle: state.user.address)
                   ],
                 ),
               ),

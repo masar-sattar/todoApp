@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:todo_app/core/utilities/app_colors.dart';
 
 class FieldProfile extends StatelessWidget {
   const FieldProfile({
@@ -17,11 +18,11 @@ class FieldProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Container(
         decoration: BoxDecoration(
           color: Color(0xFFF8F7F7),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: const Color(0xFFF7F3F3),
             width: 1,
@@ -39,16 +40,16 @@ class FieldProfile extends StatelessWidget {
                   Text(
                     labelText,
                     style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
+                      color: AppColors.lightGray,
+                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     lableTitle,
                     style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
                   ),

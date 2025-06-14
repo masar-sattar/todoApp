@@ -49,7 +49,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Form(
-              // autovalidateMode: autovalidateMode,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               key: formKey,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -71,6 +71,21 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                     const SizedBox(height: 20),
                     Container(
                       child: IntlPhoneField(
+                        validator: (phone) {
+                          if (phone == null || phone.number.isEmpty) {
+                            return 'Please enter your phone number';
+                          } else if (phone.number.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
+                          return null;
+                        },
+                        onChanged: (phone) {
+                          phoneNumber = phone.completeNumber;
+                        },
+                        onSaved: (phone) {
+                          phoneNumber = phone?.completeNumber;
+                        },
+
                         decoration: const InputDecoration(
                           labelText: 'Phone Number',
                           border: OutlineInputBorder(
@@ -79,15 +94,15 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                         ),
                         languageCode: "en",
                         initialCountryCode: "IQ",
-                        onChanged: (phone) {
-                          print(phone.completeNumber);
-                        },
-                        onCountryChanged: (country) {
-                          print('Country changed to: ${country.name}');
-                        },
-                        onSaved: (phone) {
-                          phoneNumber = phone?.completeNumber;
-                        },
+                        // onChanged: (phone) {
+                        //   print(phone.completeNumber);
+                        // },
+                        // onCountryChanged: (country) {
+                        //   print('Country changed to: ${country.name}');
+                        // },
+                        // onSaved: (phone) {
+                        //   phoneNumber = phone?.completeNumber;
+                        // },
                       ),
                     ),
                     const SizedBox(height: 10),
