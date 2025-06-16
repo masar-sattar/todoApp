@@ -27,21 +27,53 @@ class RemoteTaskDataSource extends BaseRemoteTaskDataSource {
   }
 
   @override
-  Future<List<TaskModel>> getTasks(String status) async {
+  // Future<List<TaskModel>> getTasks(String status) async {
+  //   List<TaskModel> tasks = [];
+  //   try {
+  //     final response = await DioHelper.getData(
+  //         endPoint: "/todos", query: status == "all" ? {} : {"status": status});
+
+  //     final data = response.data;
+  //     // print(data);
+
+  //     for (int i = 0; i < data.length; i++) {
+  //       tasks.add(TaskModel.fromJson(data[i]));
+  //     }
+
+  //     if (response.statusCode != 200) {
+  //       throw ApiErrorModel.fromJson(response.data);
+  //     }
+  //   } catch (error) {
+  //     throw ApiErrorModel(message: error.toString());
+  //   }
+
+  //   return tasks;
+  // }
+  @override
+  Future<List<TaskModel>> getTasks(String status, int page) async {
     List<TaskModel> tasks = [];
+
     try {
-      final response = await DioHelper.getData(
-          endPoint: "/todos", query: status == "all" ? {} : {"status": status});
+      final query = {
+        if (status != "all") "status": status,
+        "page": page.toString(),
+      };
 
-      final data = response.data;
-      // print(data);
-
-      for (int i = 0; i < data.length; i++) {
-        tasks.add(TaskModel.fromJson(data[i]));
-      }
+      final response =
+          await DioHelper.getData(endPoint: "/todos", query: query);
 
       if (response.statusCode != 200) {
         throw ApiErrorModel.fromJson(response.data);
+      }
+
+      final data = response.data;
+
+      if (data is! List<dynamic>) {
+        throw ApiErrorModel(message: "Invalid data format");
+      }
+
+      for (var item in data) {
+        tasks.add(TaskModel.fromJson(item));
       }
     } catch (error) {
       throw ApiErrorModel(message: error.toString());

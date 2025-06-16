@@ -50,8 +50,8 @@ class TaskRepository extends BaseTaskRepository {
   }
 
   @override
-  Future<List<TaskModel>> getTasks(String status) async {
-    return await dataSource.getTasks(status);
+  Future<List<TaskModel>> getTasks(String status, int page) async {
+    return await dataSource.getTasks(status, page);
   }
 
   @override

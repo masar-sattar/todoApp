@@ -299,7 +299,6 @@ import 'package:todo_app/features/auth/data_layer/data_source/auth_local_datasor
 import 'package:todo_app/features/auth/presentation_layer/screens/login_screen_view.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_cubit.dart';
 import 'package:todo_app/features/todo/presentation_layer/cubit/todo_state.dart';
-// import 'package:todo_app/features/todo/presentation_layer/screens/details_screen.dart';
 import 'package:todo_app/features/todo/presentation_layer/screens/qr_scanner_screen.dart';
 import '../widget/task_item.dart';
 import 'add_task/add_new_task.dart';
@@ -315,6 +314,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late ScrollController _scrollController;
+
   // List<Map<String, String>> list = [
   //   {"label": "All", "value": "all"},
   //   {"label": "InProgress", "value": "inProgress"},
@@ -342,9 +343,29 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     selectedItem = list[0];
-    context.read<TaskCubit>().getTasks();
-    mainContext = context;
-    super.initState();
+    // تحميل الصفحة الأولى للفلتر الافتراضي
+    context.read<TaskCubit>().getTasks(status: selectedItem.toLowerCase());
+
+    // إنشاء ScrollController
+    _scrollController = ScrollController();
+
+    //  إذا اقترب المستخدم من نهاية القائمة، اطلب تحميل المزيد
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        // استدعاء تحميل المزيد مع تمرير isLoadMore = true
+        context.read<TaskCubit>().getTasks(
+              status: selectedItem.toLowerCase(),
+              isLoadMore: true,
+            );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // هنا تضعها لتنظيف الـ controller
+    super.dispose();
   }
 
   // @override
@@ -467,8 +488,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             selectedItem = list[i];
                             setState(() {});
 
-                            String value = selectedItem[0].toLowerCase() +
-                                selectedItem.substring(1);
+                            // String value = selectedItem[0].toLowerCase() +
+                            //     selectedItem.substring(1);
+                            String value = selectedItem.toLowerCase();
 
                             context.read<TaskCubit>().getTasks(status: value);
                           })
@@ -603,12 +625,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
 
                     return ListView.builder(
-                      itemCount: tasks.length,
-                      itemBuilder: (context, index) => GestureDetector(
-                        behavior: HitTestBehavior.translucent, //  مفيدددة جدا
-                        child: TaskItem(task: tasks[index]),
-                        onTap: () {},
-                      ),
+                      controller: _scrollController, // ربط الـ ScrollController
+                      itemCount:
+                          tasks.length + 1, // +1 لإضافة عنصر تحميل في النهاية
+                      itemBuilder: (context, index) {
+                        if (index < tasks.length) {
+                          // عرض المهام
+                          return GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            child: TaskItem(task: tasks[index]),
+                            onTap: () {},
+                          );
+                        } else {
+                          // عنصر تحميل المزيد أو رسالة لا يوجد المزيد
+                          if (context.read<TaskCubit>().hasMore) {
+                            return const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
+                          } else {
+                            return const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Center(child: Text("No more tasks")),
+                            );
+                          }
+                        }
+                      },
                     );
                   } else {
                     return const SizedBox();

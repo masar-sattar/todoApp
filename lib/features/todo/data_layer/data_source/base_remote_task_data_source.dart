@@ -6,7 +6,7 @@ abstract class BaseRemoteTaskDataSource {
     required FormData data,
   });
 
-  Future<List<TaskModel>> getTasks(String status);
+  Future<List<TaskModel>> getTasks(String status, int page);
 
   Future<void> createTask(TaskModel task);
 

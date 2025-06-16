@@ -29,6 +29,12 @@ class LoadedOneTask extends TodoState {
   LoadedOneTask({required this.oneTask});
 }
 
+class LoadingMoreState extends TodoState {
+  final List<TaskModel> tasks;
+
+  LoadingMoreState({required this.tasks});
+}
+
 
 // class TaskPriorityUpdated extends TodoState{}
 // class EmptyState extends TodoState {}

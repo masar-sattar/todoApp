@@ -49,8 +49,8 @@ class FieldProfile extends StatelessWidget {
                     lableTitle,
                     style: const TextStyle(
                       fontSize: 20,
-                      // fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0x992F2F2F),
                     ),
                   ),
                 ],

@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-          "profile",
+          "Profile",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
