@@ -102,6 +102,54 @@ class _AddNewTaskState extends State<AddNewTask> {
                         ],
                       ),
                     );
+                  } else if (widget.isEdit &&
+                      widget.task != null &&
+                      widget.task!.image.isNotEmpty) {
+                    // لا يوجد صورة محلية جديدة، لكن هناك صورة موجودة من المهمة (رابط)
+                    return Container(
+                      height: 200,
+                      width: double.infinity,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        fit: StackFit.expand,
+                        children: [
+                          Image.network(
+                            widget.task!.image,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(child: CircularProgressIndicator());
+                            },
+                            errorBuilder: (context, error, stackTrace) =>
+                                Center(
+                              child: Icon(Icons.broken_image,
+                                  size: 50, color: Colors.grey),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: 8,
+                            child: GestureDetector(
+                              onTap: () {
+                                context.read<TaskCubit>().pickTaskImage();
+                              },
+                              child: CircleAvatar(
+                                radius: 25,
+                                backgroundColor: AppColors.mainColor,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   } else {
                     return DottedBorder(
                       borderType: BorderType.RRect,
@@ -203,7 +251,8 @@ class _AddNewTaskState extends State<AddNewTask> {
                         }
 
                         // تحقق من الصورة
-                        if (context.read<TaskCubit>().taskImage == null) {
+                        if (context.read<TaskCubit>().taskImage == null &&
+                            widget.isEdit == false) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('Please add an image')),
                           );

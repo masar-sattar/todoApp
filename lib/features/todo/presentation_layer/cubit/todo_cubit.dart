@@ -166,22 +166,52 @@ class TaskCubit extends Cubit<TodoState> {
     return response;
   }
 
+  // Future<bool> updateTask(String taskId) async {
+  //   emit(LoadingState());
+
+  //   if (taskImage != null) {
+  //     await uploadTaskImage();
+  //   }
+
+  //   await taskrepo.updateTask(
+  //     id: taskId,
+  //     title: createTask!.title!,
+  //     description: createTask!.descrption!,
+  //     priority: createTask!.priority!,
+  //     date: createTask!.date!,
+  //     image: createTask!.image ?? "",
+  //     state: createTask?.state ?? "",
+  //   );
+  //   return true;
+  // }
+
   Future<bool> updateTask(String taskId) async {
     emit(LoadingState());
 
-    if (taskImage != null) {
-      await uploadTaskImage();
-    }
+    try {
+      if (taskImage != null) {
+        await uploadTaskImage();
+      }
 
-    await taskrepo.updateTask(
-      id: taskId,
-      title: createTask!.title!,
-      description: createTask!.descrption!,
-      priority: createTask!.priority!,
-      date: createTask!.date!,
-      image: createTask!.image ?? "",
-      state: createTask?.state ?? "",
-    );
-    return true;
+      await taskrepo.updateTask(
+        id: taskId,
+        title: createTask!.title!,
+        description: createTask!.descrption!,
+        priority: createTask!.priority!,
+        date: createTask!.date!,
+        image: createTask!.image ?? "",
+        state: createTask?.state ?? "",
+      );
+
+      // بعد التحديث أرسل حالة النجاح أو أعد تحميل البيانات
+      await getTasks(); // مثلا هذه الدالة تجلب كل المهام مجددًا وتبث حالة جديدة
+
+      // emit(UpdateSuccessState()); // أو حالة خاصة بتحديث المهمة
+
+      return true;
+    } catch (e) {
+      // emit(ErrorState(error.toString()));
+      return false;
+    }
   }
 }

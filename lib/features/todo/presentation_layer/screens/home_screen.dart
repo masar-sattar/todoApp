@@ -342,6 +342,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    super.initState();
+    mainContext = context;
     selectedItem = list[0];
     // تحميل الصفحة الأولى للفلتر الافتراضي
     context.read<TaskCubit>().getTasks(status: selectedItem.toLowerCase());
@@ -407,7 +409,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreenView()),
+                MaterialPageRoute(
+                    builder: (context) => const LoginScreenView()),
                 (Route<dynamic> route) => false,
               );
             },
@@ -488,9 +491,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             selectedItem = list[i];
                             setState(() {});
 
-                            // String value = selectedItem[0].toLowerCase() +
-                            //     selectedItem.substring(1);
-                            String value = selectedItem.toLowerCase();
+                            String value = selectedItem[0].toLowerCase() +
+                                selectedItem.substring(1);
+                            // String value = selectedItem.toLowerCase();
 
                             context.read<TaskCubit>().getTasks(status: value);
                           })

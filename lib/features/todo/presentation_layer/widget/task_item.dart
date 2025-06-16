@@ -95,86 +95,162 @@ class _TaskItemState extends State<TaskItem> {
                       ),
                       PopupMenuButton<String>(
                         icon: Icon(Icons.more_vert),
-                        onSelected: (String value) {},
+                        onSelected: (String value) async {
+                          if (value == 'edit') {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AddNewTask(isEdit: true, task: widget.task),
+                              ),
+                            );
+                            mainContext!.read<TaskCubit>().getTasks();
+                          } else if (value == 'delete') {
+                            bool? confirmed = await showDialog<bool>(
+                              context: context,
+                              builder: (BuildContext dialogContext) {
+                                return AlertDialog(
+                                  title: Text('Confirm Deletion'),
+                                  content: Text(
+                                      'Are you sure you want to delete this task?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(dialogContext)
+                                              .pop(false),
+                                      child: Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(dialogContext).pop(true),
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                            if (confirmed == true) {
+                              await context
+                                  .read<TaskCubit>()
+                                  .deleteTask(widget.task.id);
+                              if (!context.mounted) return;
+                              // يمكنك تحديث الواجهة هنا أو إظهار رسالة نجاح
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext successDialogContext) {
+                                  return AlertDialog(
+                                    title: Text('Success'),
+                                    content: Text('Delete done'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(successDialogContext)
+                                                .pop(),
+                                        child: Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          }
+                        },
                         itemBuilder: (BuildContext context) =>
                             <PopupMenuEntry<String>>[
                           PopupMenuItem<String>(
                             value: 'edit',
                             child: Text('Edit'),
-                            onTap: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddNewTask(
-                                      isEdit: true, task: widget.task),
-                                ),
-                              );
-                              // print('hello masar');
-                              mainContext!.read<TaskCubit>().getTasks();
-                            },
                           ),
                           PopupMenuItem<String>(
                             value: 'delete',
                             child: Text('Delete'),
-                            onTap: () async {
-                              Future.delayed(Duration.zero, () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext dialogContext) {
-                                    return AlertDialog(
-                                      title: Text('Confirm Deletion'),
-                                      content: Text(
-                                          'Are you sure you want to delete this task?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(dialogContext).pop();
-                                          },
-                                          child: Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            Navigator.of(dialogContext).pop();
-
-                                            await context
-                                                .read<TaskCubit>()
-                                                .deleteTask(widget.task.id);
-
-                                            if (!context.mounted) return;
-                                            // Navigator.pop(context);
-
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext
-                                                  successDialogContext) {
-                                                return AlertDialog(
-                                                  title: Text('Success'),
-                                                  content: Text('Delete done'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(
-                                                                successDialogContext)
-                                                            .pop();
-                                                      },
-                                                      child: Text('OK'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: Text('OK'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              });
-                            },
                           )
                         ],
                       ),
+
+                      // PopupMenuButton<String>(
+                      //   icon: Icon(Icons.more_vert),
+                      //   onSelected: (String value) {},
+                      //   itemBuilder: (BuildContext context) =>
+                      //       <PopupMenuEntry<String>>[
+                      //     PopupMenuItem<String>(
+                      //       value: 'edit',
+                      //       child: Text('Edit'),
+                      //       onTap: () async {
+                      //         await Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => AddNewTask(
+                      //                 isEdit: true, task: widget.task),
+                      //           ),
+                      //         );
+                      //         // print('hello masar');
+                      //         mainContext!.read<TaskCubit>().getTasks();
+                      //       },
+                      //     ),
+                      //     PopupMenuItem<String>(
+                      //       value: 'delete',
+                      //       child: Text('Delete'),
+                      //       onTap: () async {
+                      //         Future.delayed(Duration.zero, () {
+                      //           showDialog(
+                      //             context: context,
+                      //             builder: (BuildContext dialogContext) {
+                      //               return AlertDialog(
+                      //                 title: Text('Confirm Deletion'),
+                      //                 content: Text(
+                      //                     'Are you sure you want to delete this task?'),
+                      //                 actions: [
+                      //                   TextButton(
+                      //                     onPressed: () {
+                      //                       Navigator.of(dialogContext).pop();
+                      //                     },
+                      //                     child: Text('Cancel'),
+                      //                   ),
+                      //                   TextButton(
+                      //                     onPressed: () async {
+                      //                       Navigator.of(dialogContext).pop();
+
+                      //                       await context
+                      //                           .read<TaskCubit>()
+                      //                           .deleteTask(widget.task.id);
+
+                      //                       if (!context.mounted) return;
+                      //                       // Navigator.pop(context);
+
+                      //                       showDialog(
+                      //                         context: context,
+                      //                         builder: (BuildContext
+                      //                             successDialogContext) {
+                      //                           return AlertDialog(
+                      //                             title: Text('Success'),
+                      //                             content: Text('Delete done'),
+                      //                             actions: [
+                      //                               TextButton(
+                      //                                 onPressed: () {
+                      //                                   Navigator.of(
+                      //                                           successDialogContext)
+                      //                                       .pop();
+                      //                                 },
+                      //                                 child: Text('OK'),
+                      //                               ),
+                      //                             ],
+                      //                           );
+                      //                         },
+                      //                       );
+                      //                     },
+                      //                     child: Text('OK'),
+                      //                   ),
+                      //                 ],
+                      //               );
+                      //             },
+                      //           );
+                      //         });
+                      //       },
+                      //     )
+                      //   ],
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 4),
