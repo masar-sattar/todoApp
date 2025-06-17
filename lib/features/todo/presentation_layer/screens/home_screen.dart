@@ -361,6 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
               isLoadMore: true,
             );
       }
+      setState(() {});
     });
   }
 
@@ -611,7 +612,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: BlocBuilder<TaskCubit, TodoState>(
                 builder: (context, state) {
-                  if (state is LoadingState) {
+                  if (state is LoadedState &&
+                      state.isFirstLoading == true &&
+                      state.isloading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is ErrorState) {
                     return const Center(child: Text("Error loading tasks"));
@@ -623,7 +626,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     //     .where((task) => task.state == selectedItem)
                     //     .toList();
 
-                    if (tasks.isEmpty) {
+                    if (tasks.isEmpty && state.isloading == false) {
                       return const Center(child: Text("No tasks found"));
                     }
 
@@ -641,17 +644,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         } else {
                           // عنصر تحميل المزيد أو رسالة لا يوجد المزيد
-                          if (context.read<TaskCubit>().hasMore) {
-                            return const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
-                          } else {
-                            return const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Center(child: Text("No more tasks")),
-                            );
-                          }
+                          // if (context.read<TaskCubit>().hasMore) {
+                          //   return const Padding(
+                          //     padding: EdgeInsets.all(16),
+                          //     child: Center(child: CircularProgressIndicator()),
+                          //   );
+                          // } else {
+                          //   return const Padding(
+                          //     padding: EdgeInsets.all(16),
+                          //     child: Center(child: Text("No more tasks")),
+                          //   );
+                          // }
                         }
                       },
                     );
@@ -661,6 +664,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+            BlocBuilder<TaskCubit, TodoState>(builder: (context, state) {
+              if (state is LoadedState &&
+                  state.isloading &&
+                  state.isFirstLoading == false) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: const Center(child: CircularProgressIndicator()),
+                );
+              } else if (context.read<TaskCubit>().hasMore == false &&
+                  _scrollController.position.pixels ==
+                      _scrollController.position.maxScrollExtent) {
+                return Center(child: Text('No More task'));
+              }
+              return SizedBox();
+            })
           ],
         ),
       ),

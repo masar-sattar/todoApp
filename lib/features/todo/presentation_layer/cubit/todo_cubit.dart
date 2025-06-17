@@ -122,9 +122,8 @@ class TaskCubit extends Cubit<TodoState> {
       if (isLoadingMore || !hasMore)
         return; // لا تسمح بتحميل أكثر إذا جاري تحميل أو لا يوجد المزيد
       isLoadingMore = true;
-      emit(LoadingMoreState(
-          tasks:
-              taskList)); // حالة تحميل المزيد (يمكنك تعريف هذه الحالة في todo_state.dart)
+
+      // emit(LoadingMoreState(tasks: taskList));
     } else {
       currentPage = 1;
       hasMore = true;
@@ -133,6 +132,10 @@ class TaskCubit extends Cubit<TodoState> {
     }
 
     try {
+      emit(LoadedState(
+          tasks: taskList,
+          isloading: true,
+          isFirstLoading: isLoadMore == false));
       final response = await taskrepo.getTasks(status, currentPage);
 
       if (response.isEmpty) {
@@ -142,7 +145,10 @@ class TaskCubit extends Cubit<TodoState> {
         currentPage++;
       }
 
-      emit(LoadedState(tasks: taskList));
+      emit(LoadedState(
+          tasks: taskList,
+          isloading: false,
+          isFirstLoading: isLoadMore == false));
     } catch (error) {
       emit(ErrorState(error.toString()));
     } finally {

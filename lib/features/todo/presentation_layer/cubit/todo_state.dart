@@ -10,8 +10,12 @@ class LoadingState extends TodoState {}
 
 class LoadedState extends TodoState {
   final List<TaskModel> tasks;
+  final bool isloading;
+  final bool isFirstLoading;
 
   LoadedState({
+    required this.isFirstLoading,
+    required this.isloading,
     required this.tasks,
   });
 }
