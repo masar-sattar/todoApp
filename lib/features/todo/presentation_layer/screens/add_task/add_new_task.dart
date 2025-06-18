@@ -19,6 +19,7 @@ import '../../widget/priorty_dropdown.dart';
 class AddNewTask extends StatefulWidget {
   final TaskModel? task;
   final bool isEdit;
+
   const AddNewTask({super.key, required this.isEdit, this.task});
 
   @override
@@ -212,7 +213,7 @@ class _AddNewTaskState extends State<AddNewTask> {
               if (widget.isEdit)
                 Padding(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: const StatuDropdown(),
+                  child: StatusDropdown(),
                 ),
               const SizedBox(height: 8),
 
@@ -238,10 +239,15 @@ class _AddNewTaskState extends State<AddNewTask> {
                             borderRadius: BorderRadius.circular(12)),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
+                      // onPressed: () async {
+                      //   if (!_formKey.currentState!.validate()) {
+                      //     return;
+                      //   }
                       onPressed: () async {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
+
                         // تحقق من التاريخ
                         if (dateController.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(

@@ -2,23 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/todo_cubit.dart';
 
-class StatuDropdown extends StatefulWidget {
-  const StatuDropdown({super.key});
-
-  @override
-  State<StatuDropdown> createState() => _StatuDropdownState();
-}
-
-class _StatuDropdownState extends State<StatuDropdown> {
-  List<String> items = ["waiting", "inProgress", "finished"];
+class StatusDropdown extends StatelessWidget {
+  const StatusDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String?>(
-      value: null, // تأكد من أن selectedPriority موجودة في state
-      hint: const Text("Select an item"),
+    final taskCubit = context.read<TaskCubit>();
+    final selectedState = taskCubit.createTask?.state;
+
+    List<String> items = ["waiting", "inProgress", "finished"];
+
+    return DropdownButtonFormField<String>(
+      value: items.contains(selectedState) ? selectedState : null,
+      hint: const Text("Select status"),
       decoration: InputDecoration(
-        labelText: " select status", //
+        labelText: "Select status",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -30,8 +28,13 @@ class _StatuDropdownState extends State<StatuDropdown> {
         );
       }).toList(),
       onChanged: (String? newValue) {
-        context.read<TaskCubit>().createTask?.state = newValue;
-        // context.read<TaskCubit>().selectedLevelPriority(newValue);
+        taskCubit.createTask?.state = newValue;
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'please slecet status';
+        }
+        return null;
       },
     );
   }
